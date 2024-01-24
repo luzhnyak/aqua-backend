@@ -4,7 +4,7 @@
 //     }
 
 const mongoose = require("mongoose");
-const { handleMongooseError } = require("../helpers");
+const { handleMongooseError } = require("../../helpers");
 const Schema = mongoose.Schema;
 const Joi = require("joi");
 
