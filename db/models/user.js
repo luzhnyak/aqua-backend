@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { handleMongooseError } = require("../../helpers");
 const Schema = mongoose.Schema;
-const Joi = require("joi");
+const { genSalt, hash, compare } = require("bcrypt");
 
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
@@ -11,8 +11,10 @@ const userSchema = new Schema(
   {
     password: {
       type: String,
-      minLength: 6,
+      minLength: 8,
+      maxLength: 64,
       required: [true, "Set password for user"],
+      select: false,
     },
     email: {
       type: String,
@@ -20,26 +22,27 @@ const userSchema = new Schema(
       unique: true,
       required: [true, "Email is required"],
     },
-    subscription: {
+    name: {
       type: String,
-      enum: ["starter", "pro", "business"],
-      default: "starter",
+      default: this.email,
     },
     token: {
       type: String,
     },
+    waterRate: {
+      type: number,
+      max: 15000,
+    },
     avatarURL: {
       type: String,
-      required: true,
     },
-
     verify: {
       type: Boolean,
       default: false,
     },
     verificationToken: {
       type: String,
-      required: [true, "Verify token is required"],
+      // required: [true, "Verify token is required"],
     },
   },
   { versionKey: false, timestamps: true }
@@ -47,35 +50,21 @@ const userSchema = new Schema(
 
 userSchema.post("save", handleMongooseError);
 
+// ========================== Auto Hash Password
+
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+
+  const salt = await genSalt(10);
+  this.password = await hash(this.password, salt);
+
+  next();
+});
+
+//=========================== Compare passwords
+userSchema.methods.checkPassword = (candidate, passwdHash) =>
+  compare(candidate, passwdHash);
+
 const User = mongoose.model("user", userSchema);
 
-// ========================== Joi schemas
-
-const userJoiSchema = Joi.object({
-  password: Joi.string()
-    .min(6)
-    .required()
-    .messages({ "any.required": "Set password for user" }),
-  email: Joi.string().pattern(emailRegexp).required().messages({
-    "any.required": "Email is required",
-    "string.pattern.base": "Email {:[.]} is not valid",
-  }),
-});
-
-const userSubscriptionSchema = Joi.object({
-  subscription: Joi.string().valid("starter", "pro", "business"),
-});
-
-const userEmailSchema = Joi.object({
-  email: Joi.string().pattern(emailRegexp).required().messages({
-    "any.required": "Missing required field email",
-    "string.pattern.base": "Email {:[.]} is not valid",
-  }),
-});
-
-module.exports = {
-  User,
-  userJoiSchema,
-  userSubscriptionSchema,
-  userEmailSchema,
-};
+module.exports = User;
