@@ -30,7 +30,7 @@ const userSchema = new Schema(
       type: String,
     },
     waterRate: {
-      type: number,
+      type: Number,
       max: 15000,
     },
     avatarURL: {

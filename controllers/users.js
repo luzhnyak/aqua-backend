@@ -130,7 +130,7 @@ const logoutUser = async (req, res) => {
 // ============================== Verify email
 
 const verifyEmail = ctrlWrapper(async (req, res) => {
-  await userServices.verifyEmail(peq.params.verificationToken);
+  await userServices.verifyEmail(req.params.verificationToken);
 
   res.status(200).json({ message: "Verification successful" });
 });
