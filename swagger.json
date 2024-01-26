@@ -211,16 +211,16 @@
     "/users/logout": {
       "post": {
         "tags": ["Users"],
-        "summary": "User current",
+        "summary": "User logout",
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "responses": {
-          "200": {
+          "204": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CurrentResponse"
+                  "$ref": "#/components/schemas/LogoutResponse"
                 }
               }
             }
@@ -294,26 +294,57 @@
       "LoginResponse": {
         "type": "object",
         "properties": {
-          "token": {
-            "type": "string",
-            "description": "User token"
-          },
           "user": {
             "type": "object",
             "properties": {
+              "_id": {
+                "type": "string",
+                "description": "User's id"
+              },
               "email": {
                 "type": "string",
                 "description": "User's email",
                 "format": "email"
+              },
+              "verify": {
+                "type": "boolean",
+                "description": "User's status verify"
+              },
+              "verificationToken": {
+                "type": "string",
+                "description": "Verifivation's token or null"
+              },
+              "createdAt": {
+                "type": "string",
+                "description": "Date created"
+              },
+              "updatedAt": {
+                "type": "string",
+                "description": "Date update"
+              },
+              "waterRate": {
+                "type": "number",
+                "description": "Water daily norm"
               }
             }
+          },
+          "token": {
+            "type": "string",
+            "description": "User token"
           }
         },
         "example": {
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjM3ZWM0ZDk1ZjQwMGQ5OWJlYTZkMyIsImlhdCI6MTcwNjI2NjEwOSwiZXhwIjoxNzA3NDc1NzA5fQ.V2WK1seCRxIfKQNfcEjyc34X_d_JAcisLKZWr1J7aEc",
           "user": {
-            "email": "user@example.com"
-          }
+            "_id": "example9b3dfc0a5762658a",
+            "email": "user@example.com",
+            "verify": true,
+            "verificationToken": null,
+            "createdAt": "2024-01-26T18:15:16.852Z",
+            "updatedAt": "2024-01-26T19:56:22.198Z",
+            "waterRate": 2000
+          },
+
+          "token": "string.string.string"
         }
       },
       "VerifySendTokenResponse": {
@@ -357,17 +388,27 @@
           "user": {
             "type": "object",
             "properties": {
+              "_id": {
+                "type": "string",
+                "description": "User's id"
+              },
               "email": {
                 "type": "string",
                 "description": "User's email",
                 "format": "email"
+              },
+              "waterRate": {
+                "type": "number",
+                "description": "Water daily norm"
               }
             }
           }
         },
         "example": {
           "user": {
-            "email": "user@example.com"
+            "_id": "example9b3dfc0a5762658a",
+            "email": "user@example.com",
+            "waterRate": 2000
           }
         }
       },
