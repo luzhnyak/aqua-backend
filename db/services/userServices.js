@@ -65,8 +65,47 @@ exports.login = async (userData) => {
   };
 };
 
+exports.getCurrentUser = async (id) => {
+  const user = await User.findById(id).select(
+    "name email avatarURL waterRate gender"
+  );
+
+  return user;
+};
+
 exports.logout = async (user) => {
   user.token = "";
 
   await user.save();
+};
+
+exports.updateUserWaterRate = async (id, waterRateData) => {
+  const user = await User.findById(id);
+  user.waterRate = waterRateData.waterRate;
+
+  return user.save();
+};
+
+exports.updateUserData = async (id, userData) => {
+  const user = await User.findById(id).select("+password");
+
+  if ("password" in userData) {
+    const isValidPassword = await user.checkPassword(
+      userData.password,
+      user.password
+    );
+
+    if (!isValidPassword) throw HttpError(401, "Password is wrong");
+
+    user.password = userData.newPassword;
+  }
+
+  Object.keys(userData).forEach((key) => {
+    if (key === "password" || key === "newPassword") {
+      return;
+    }
+    user[key] = userData[key];
+  });
+
+  return user.save();
 };

@@ -4,18 +4,14 @@ const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 exports.userJoiSchema = Joi.object({
   password: Joi.string()
-        .min(8)
-        .max(64)
+    .min(8)
+    .max(64)
     .required()
     .messages({ "any.required": "Set password for user" }),
   email: Joi.string().pattern(emailRegexp).required().messages({
     "any.required": "Email is required",
     "string.pattern.base": "Email {:[.]} is not valid",
   }),
-});
-
-exports.userSubscriptionSchema = Joi.object({
-  subscription: Joi.string().valid("starter", "pro", "business"),
 });
 
 exports.userEmailSchema = Joi.object({

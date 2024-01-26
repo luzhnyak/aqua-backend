@@ -3,7 +3,7 @@ const { HttpError, ctrlWrapper } = require("../helpers");
 const User = require("../db/models/user");
 const { serverConfig } = require("../configs");
 
-const aunthenticate = ctrlWrapper(async (req, res, next) => {
+const authenticate = ctrlWrapper(async (req, res, next) => {
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
   
@@ -28,4 +28,4 @@ const aunthenticate = ctrlWrapper(async (req, res, next) => {
   }
 });
 
-module.exports = aunthenticate;
+module.exports = authenticate;

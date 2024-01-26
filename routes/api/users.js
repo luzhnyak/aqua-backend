@@ -44,4 +44,8 @@ router.patch(
   ctrl.updateAvatar
 );
 
+router.patch("/water-rate", authenticate, ctrl.updateUserWaterRate);
+
+router.patch("/update-user", authenticate, ctrl.updateUserData);
+
 module.exports = router;
