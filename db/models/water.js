@@ -18,16 +18,17 @@ const waterSchema = new Schema(
     {
         date: {
             type: Date,
+            required: [true, 'Date is required']
         },
         waterRate: {
             type: Number,
             default: 1500,
             required: [true, 'Water rate is required'],
         },
-        percentOfRate: {
+        totalVolume: {
             type: Number,
             default: 0,
-            required: [true, 'Percent is required']
+            required: [true, 'Total is required']
         },
         dailyEntries: [entriesSchema],
         owner: {
