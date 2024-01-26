@@ -25,12 +25,16 @@ const userSchema = new Schema(
     name: {
       type: String,
     },
+    gender:{
+      type:String,
+    },
     token: {
       type: String,
     },
     waterRate: {
       type: Number,
       max: 15000,
+      default:2000,
     },
     avatarURL: {
       type: String,
