@@ -6,12 +6,13 @@ const { serverConfig } = require("../configs");
 const aunthenticate = ctrlWrapper(async (req, res, next) => {
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
-
+  
   if (bearer !== "Bearer") {
     next(HttpError(401));
   }
-
+  
   try {
+    
     const { id } = jwt.verify(token, serverConfig.jwtSecret);
 
     const user = await User.findById(id);
