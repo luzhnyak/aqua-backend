@@ -25,8 +25,10 @@ const userSchema = new Schema(
     name: {
       type: String,
     },
-    gender:{
-      type:String,
+    gender: {
+      type: String,
+      enum: ["female", "male"],
+      default: "female",
     },
     token: {
       type: String,
@@ -34,14 +36,14 @@ const userSchema = new Schema(
     waterRate: {
       type: Number,
       max: 15000,
-      default:2000,
+      default: 2000,
     },
     avatarURL: {
       type: String,
     },
     verify: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     verificationToken: {
       type: String,

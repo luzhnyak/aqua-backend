@@ -1,5 +1,5 @@
 const express = require("express");
-const { validateBody, aunthenticate, upload } = require("../../middlewares");
+const { validateBody, authenticate, upload } = require("../../middlewares");
 const {
   userJoiSchema,
   userSubscriptionSchema,
@@ -26,22 +26,19 @@ router.post(
 
 router.post("/login", validateBody.checkCreate(userJoiSchema), ctrl.loginUser);
 
-router.get("/current", aunthenticate, ctrl.getCurrentUser);
+router.get("/current", authenticate, ctrl.getCurrentUser);
 
-router.post("/logout", aunthenticate, ctrl.logoutUser);
-
-// router.patch(
-//   "/",
-//   aunthenticate,
-//   validateBody.checkUpdate(userSubscriptionSchema),
-//   ctrl.updateSubscription
-// );
+router.post("/logout", authenticate, ctrl.logoutUser);
 
 router.patch(
   "/avatars",
-  aunthenticate,
+  authenticate,
   upload.single("avatar"),
   ctrl.updateAvatar
 );
+
+router.patch("/water-rate", authenticate, ctrl.updateUserWaterRate);
+
+router.patch("/update-user", authenticate, ctrl.updateUserData);
 
 module.exports = router;

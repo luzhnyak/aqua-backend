@@ -14,20 +14,9 @@ const avatarDir = path.join(__dirname, "../", "public", "avatars");
 require("dotenv").config();
 const { BASE_URL } = process.env;
 
-// ============================== Get current User
-const getCurrentUser = ctrlWrapper(async (req, res) => {
-  const { _id } = req.user;
-
-  const user = await User.findOne({ _id }).select(
-    "name email avatarURL waterRate gender"
-  );
-
-  res.json({ user });
-});
-
 // ============================== Register
 
-const registerUser = ctrlWrapper(async (req, res) => {
+const registerUser = async (req, res) => {
   const { user } = await userServices.createNewUser(req.body);
 
   const verifyEmail = {
@@ -36,12 +25,20 @@ const registerUser = ctrlWrapper(async (req, res) => {
     html: `<a target="_blank" href="${BASE_URL}/users/verify/${user.verificationToken}">Click verify email</a>`,
   };
 
-  sendEmail(verifyEmail);
+  // sendEmail(verifyEmail);
 
   res.status(201).json({
     user: { email: user.email },
   });
-});
+};
+
+// ============================== Verify email
+
+const verifyEmail = async (req, res) => {
+  await userServices.verifyEmail(req.params.verificationToken);
+
+  res.status(200).json({ message: "Verification successful" });
+};
 
 // ============================== Login
 
@@ -54,16 +51,36 @@ const loginUser = async (req, res) => {
   });
 };
 
-// ============================== Update subscription
+// ============================== Get current User
+const getCurrentUser = async (req, res) => {
+  const user = await userServices.getCurrentUser(req.user.id);
 
-// const updateSubscription = async (req, res) => {
-//   const { _id } = req.user;
-//   const user = await User.findByIdAndUpdate({ _id }, req.body, {
-//     new: true,
-//   });
+  res.json({ user });
+};
 
-//   res.json(user);
-// };
+// ============================== Logout User
+
+const logoutUser = async (req, res) => {
+  await userServices.logout(req.user);
+
+  res.status(204).send();
+};
+
+// ============================== Update water rate
+
+const updateUserWaterRate = async (req, res) => {
+  const user = await userServices.updateUserWaterRate(req.user.id, req.body);
+
+  res.status(200).json(user);
+};
+
+// ============================== Update User Data
+
+const updateUserData = async (req, res) => {
+  const user = await userServices.updateUserData(req.user.id, req.body);
+
+  res.status(200).json(user);
+};
 
 // ============================== Update avatar
 
@@ -91,22 +108,6 @@ const updateAvatar = async (req, res) => {
     avatarURL,
   });
 };
-
-// ============================== Logout User
-
-const logoutUser = ctrlWrapper(async (req, res) => {
-  await userServices.logout(req.user);
-
-  res.status(204).send();
-});
-
-// ============================== Verify email
-
-const verifyEmail = ctrlWrapper(async (req, res) => {
-  await userServices.verifyEmail(req.params.verificationToken);
-
-  res.status(200).json({ message: "Verification successful" });
-});
 
 // ============================== Resend verify email
 
@@ -138,7 +139,8 @@ module.exports = {
   registerUser: ctrlWrapper(registerUser),
   loginUser: ctrlWrapper(loginUser),
   logoutUser: ctrlWrapper(logoutUser),
-  // updateSubscription: ctrlWrapper(updateSubscription),
+  updateUserData: ctrlWrapper(updateUserData),
+  updateUserWaterRate: ctrlWrapper(updateUserWaterRate),
   updateAvatar: ctrlWrapper(updateAvatar),
   verifyEmail: ctrlWrapper(verifyEmail),
   resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
