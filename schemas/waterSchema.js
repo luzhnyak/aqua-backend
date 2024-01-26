@@ -1,49 +1,27 @@
 const Joi = require('joi');
 const { regexp } = require('../vars');
 
-exports.bodySchemaCreate = Joi.object({
-    name: Joi.string()
-        .alphanum()
-        .min(3)
-        .max(30)
+exports.addWater = Joi.object({
+    waterVolume: Joi.number().min(1).max(5000).required().messages({
+        'number.min': 'Min value 1 ml',
+        'number.max': 'Max value 5000 ml',
+        'any.required': 'Water volume is required',
+    }),
+    time: Joi.string()
+        .regex(regexp.time)
         .required()
-        .messages({ 'any.required': 'missing required name field' }),
-    email: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-        .pattern(regexp.email)
-        .required()
-        .messages({ 'any.required': 'missing required email field' }),
-    phone: Joi.string()
-        .min(14)
-        .max(14)
-        .pattern(regexp.phone)
-        .required()
-        .messages({
-            'string.pattern.base': 'phone mast be (***) ***-**** format',
-            'any.required': 'missing required phone field',
-        }),
-    favorite: Joi.boolean(),
+        .messages({ 'any.required': 'Time is required' }),
 });
 
-exports.bodySchemaUpdate = Joi.object({
-    name: Joi.string()
-        .alphanum()
-        .min(3)
-        .max(30)
+exports.updateEntry = Joi.object({
+    date: Joi.date().required().messages({ 'any.required': 'Date is required' }),
+    time: Joi.string()
+        .regex(regexp.time)
         .required()
-        .messages({ 'any.required': 'missing required name field' }),
-    email: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-        .pattern(regexp.email)
-        .messages({ 'any.required': 'missing required email field' }),
-    phone: Joi.string()
-        .min(14)
-        .max(14)
-        .pattern(regexp.phone)
-        .required()
-        .messages({
-            'string.pattern.base': 'phone mast be (***) ***-**** format',
-            'any.required': 'missing required phone field',
-        }),
-    favorite: Joi.boolean(),
+        .messages({ 'any.required': 'Time is required' }),
+    waterVolume: Joi.number().min(1).max(5000).required().messages({
+        'number.min': 'Min value 1 ml',
+        'number.max': 'Max value 5000 ml',
+        'any.required': 'Water volume is required',
+    }),
 });
