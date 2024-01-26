@@ -36,7 +36,7 @@ const registerUser = ctrlWrapper(async (req, res) => {
     html: `<a target="_blank" href="${BASE_URL}/users/verify/${user.verificationToken}">Click verify email</a>`,
   };
 
-  sendEmail(verifyEmail);
+  // sendEmail(verifyEmail);
 
   res.status(201).json({
     user: { email: user.email },
