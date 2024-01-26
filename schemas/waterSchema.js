@@ -8,7 +8,7 @@ exports.addWater = Joi.object({
         'any.required': 'Water volume is required',
     }),
     time: Joi.string()
-        .regex(regexp.time)
+        .pattern(regexp.time)
         .required()
         .messages({ 'any.required': 'Time is required' }),
 });
@@ -16,7 +16,7 @@ exports.addWater = Joi.object({
 exports.updateEntry = Joi.object({
     date: Joi.date().required().messages({ 'any.required': 'Date is required' }),
     time: Joi.string()
-        .regex(regexp.time)
+        .pattern(regexp.time)
         .required()
         .messages({ 'any.required': 'Time is required' }),
     waterVolume: Joi.number().min(1).max(5000).required().messages({

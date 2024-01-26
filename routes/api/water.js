@@ -1,10 +1,14 @@
 const express = require('express');
-const {validateBody} = require('../../middlewares');
+const {validateBody, authenticate} = require('../../middlewares');
 const { waterSchema } = require('../../schemas');
+const waterControllers = require('../../controllers/waterControllers');
 
 const router = express.Router();
 
-router.post('/', validateBody.checkCreate(waterSchema.addWater))
+router.use(authenticate)
+
+router.post('/', validateBody.checkCreate(waterSchema.addWater), waterControllers.add)
+
 router.route('/:orderId')
   .put(validateBody.checkUpdate(waterSchema.updateEntry))
   .delete();
