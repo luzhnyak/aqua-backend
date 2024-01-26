@@ -29,7 +29,7 @@ exports.createNewUser = async (userData) => {
 exports.verifyEmail = async (verificationToken) => {
   const user = await User.findOne({ verificationToken });
 
-  if (!user) throw new HttpError(404, "User not found");
+  if (!user) throw HttpError(404, "User not found");
 
   user.verificationToken = null;
   user.verify = true;
@@ -42,13 +42,13 @@ exports.login = async (userData) => {
 
   const user = await User.findOne({ email }).select("+password");
 
-  if (!user.verify) throw new HttpError(403, "Verify your email");
+  if (!user.verify) throw HttpError(403, "Verify your email");
 
-  if (!user) throw new HttpError(401, "Email or password is wrong");
+  if (!user) throw HttpError(401, "Email or password is wrong");
 
   const passwdIsValid = await user.checkPassword(password, user.password);
 
-  if (!passwdIsValid) throw new HttpError(401, "Email or password is wrong");
+  if (!passwdIsValid) throw HttpError(401, "Email or password is wrong");
 
   const token = signToken(user.id);
 
