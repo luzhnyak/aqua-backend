@@ -18,7 +18,9 @@ const { BASE_URL } = process.env;
 const getCurrentUser = ctrlWrapper(async (req, res) => {
   const { _id } = req.user;
 
-  const user = await User.findOne({ _id }).select("email name");
+  const user = await User.findOne({ _id }).select(
+    "name email avatarURL waterRate gender"
+  );
 
   res.json({ user });
 });
@@ -47,8 +49,8 @@ const loginUser = async (req, res) => {
   const { token, user } = await userServices.login(req.body);
 
   res.status(200).json({
-    token,
     user,
+    token,
   });
 };
 

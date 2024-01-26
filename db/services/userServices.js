@@ -57,11 +57,10 @@ exports.login = async (userData) => {
   await user.save();
 
   user.password = undefined;
+  user.token = undefined; //====>Це тимчасово
 
   return {
-    user: user.name
-      ? { email: user.email, name: user.name }
-      : { email: user.email },
+    user,
     token,
   };
 };
