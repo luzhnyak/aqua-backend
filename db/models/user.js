@@ -27,8 +27,10 @@ const userSchema = new Schema(
     },
     gender: {
       type: String,
+
       enum: ["female", "male"],
       default: "female",
+
     },
     token: {
       type: String,
