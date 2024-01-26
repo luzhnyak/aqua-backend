@@ -24,7 +24,6 @@ const userSchema = new Schema(
     },
     name: {
       type: String,
-      default: this.email,
     },
     token: {
       type: String,

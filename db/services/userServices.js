@@ -50,7 +50,7 @@ exports.login = async (userData) => {
 
   if (!passwdIsValid) throw new HttpError(401, "Email or password is wrong");
 
-  const token = signToken (user.id);
+  const token = signToken(user.id);
 
   user.token = token;
 
@@ -64,4 +64,10 @@ exports.login = async (userData) => {
       : { email: user.email },
     token,
   };
+};
+
+exports.logout = async (user) => {
+  user.token = "";
+
+  await user.save();
 };
