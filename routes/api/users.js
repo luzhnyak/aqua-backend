@@ -30,12 +30,12 @@ router.get("/current", aunthenticate, ctrl.getCurrentUser);
 
 router.post("/logout", aunthenticate, ctrl.logoutUser);
 
-router.patch(
-  "/",
-  aunthenticate,
-  validateBody.checkUpdate(userSubscriptionSchema),
-  ctrl.updateSubscription
-);
+// router.patch(
+//   "/",
+//   aunthenticate,
+//   validateBody.checkUpdate(userSubscriptionSchema),
+//   ctrl.updateSubscription
+// );
 
 router.patch(
   "/avatars",

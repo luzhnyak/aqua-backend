@@ -18,9 +18,11 @@ const { BASE_URL } = process.env;
 const getCurrentUser = ctrlWrapper(async (req, res) => {
   const { _id } = req.user;
 
-  const { email, subscription } = await User.findOne({ _id });
+  const user = await User.findOne({ _id }).select(
+    "name email avatarURL waterRate gender"
+  );
 
-  res.json({ email, subscription });
+  res.json({ user });
 });
 
 // ============================== Register
@@ -28,11 +30,9 @@ const getCurrentUser = ctrlWrapper(async (req, res) => {
 const registerUser = ctrlWrapper(async (req, res) => {
   const { user } = await userServices.createNewUser(req.body);
 
-  console.log(user);
-
   const verifyEmail = {
     to: user.email,
-    subject: "Verife email",
+    subject: "Verify email",
     html: `<a target="_blank" href="${BASE_URL}/users/verify/${user.verificationToken}">Click verify email</a>`,
   };
 
@@ -46,50 +46,24 @@ const registerUser = ctrlWrapper(async (req, res) => {
 // ============================== Login
 
 const loginUser = async (req, res) => {
-  // const { email, password } = req.body;
-  // const user = await User.findOne({ email });
-
-  // if (!user) {
-  //   throw HttpError(401, "Email or password is wrong");
-  // }
-
-  // if (!user.verify) {
-  //   throw HttpError(401, "Email not verify");
-  // }
-
-  // const passwordCompare = await bcrypt.compare(password, user.password);
-
-  // if (!passwordCompare) {
-  //   throw HttpError(401, "Email or password is wrong");
-  // }
-
-  // const { SECRET_KEY } = process.env;
-
-  // const payload = {
-  //   id: user.id,
-  // };
-
-  // const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-
-  // await User.findByIdAndUpdate(user._id, { token });
   const { token, user } = await userServices.login(req.body);
 
   res.status(200).json({
-    token,
     user,
+    token,
   });
 };
 
 // ============================== Update subscription
 
-const updateSubscription = async (req, res) => {
-  const { _id } = req.user;
-  const user = await User.findByIdAndUpdate({ _id }, req.body, {
-    new: true,
-  });
+// const updateSubscription = async (req, res) => {
+//   const { _id } = req.user;
+//   const user = await User.findByIdAndUpdate({ _id }, req.body, {
+//     new: true,
+//   });
 
-  res.json(user);
-};
+//   res.json(user);
+// };
 
 // ============================== Update avatar
 
@@ -120,12 +94,11 @@ const updateAvatar = async (req, res) => {
 
 // ============================== Logout User
 
-const logoutUser = async (req, res) => {
-  const { _id } = req.user;
-  await User.findByIdAndUpdate(_id, { token: "" });
+const logoutUser = ctrlWrapper(async (req, res) => {
+  await userServices.logout(req.user);
 
-  res.status(204).json();
-};
+  res.status(204).send();
+});
 
 // ============================== Verify email
 
@@ -151,7 +124,7 @@ const resendVerifyEmail = async (req, res) => {
 
   const verifyEmail = {
     to: email,
-    subject: "Verife email",
+    subject: "Verify email",
     html: `<a target="_blank" href="${BASE_URL}/users/verify/${user.verificationToken}">Click verify email</a>`,
   };
 
@@ -165,7 +138,7 @@ module.exports = {
   registerUser: ctrlWrapper(registerUser),
   loginUser: ctrlWrapper(loginUser),
   logoutUser: ctrlWrapper(logoutUser),
-  updateSubscription: ctrlWrapper(updateSubscription),
+  // updateSubscription: ctrlWrapper(updateSubscription),
   updateAvatar: ctrlWrapper(updateAvatar),
   verifyEmail: ctrlWrapper(verifyEmail),
   resendVerifyEmail: ctrlWrapper(resendVerifyEmail),

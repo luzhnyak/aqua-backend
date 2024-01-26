@@ -24,7 +24,9 @@ const userSchema = new Schema(
     },
     name: {
       type: String,
-      default: this.email,
+    },
+    gender:{
+      type:String,
     },
     token: {
       type: String,
@@ -32,6 +34,7 @@ const userSchema = new Schema(
     waterRate: {
       type: Number,
       max: 15000,
+      default:2000,
     },
     avatarURL: {
       type: String,
