@@ -1,22 +1,35 @@
 const { Schema, model } = require('mongoose');
 const { handleMongooseError } = require('../../helpers');
+const { regexp } = require('../../vars');
+
+const entriesSchema = new Schema( {
+                waterVolume: {
+                    type: Number,
+                    required: [true, 'Set capacity of water'],
+                },
+                time: {
+                    type: String,
+                    match: regexp.time,
+                    required: [true, 'Time is required'],
+                },
+            },)
 
 const waterSchema = new Schema(
     {
-        name: {
-            type: String,
-            required: [true, 'Set name for contact'],
+        date: {
+            type: Date,
         },
-        email: {
-            type: String,
+        waterRate: {
+            type: Number,
+            default: 1500,
+            required: [true, 'Water rate is required'],
         },
-        phone: {
-            type: String,
+        percentOfRate: {
+            type: Number,
+            default: 0,
+            required: [true, 'Percent is required']
         },
-        favorite: {
-            type: Boolean,
-            default: false,
-        },
+        dailyEntries: [entriesSchema],
         owner: {
             type: Schema.Types.ObjectId,
             ref: 'user',
@@ -26,6 +39,11 @@ const waterSchema = new Schema(
     { versionKey: false, timestamps: true }
 );
 
+// waterSchema.pre('save', async function (next) {
+//     this.percentOfRate = this.dailyEntries.reduce((acc, { waterVolume }) => acc + waterVolume, 0) / this.waterRate * 100;
+//     next()
+// })
+
 waterSchema.post('save', handleMongooseError);
 
-exports.Water = model('contact', waterSchema);
+exports.Water = model('water', waterSchema);
