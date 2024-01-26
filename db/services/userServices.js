@@ -42,9 +42,9 @@ exports.login = async (userData) => {
 
   const user = await User.findOne({ email }).select("+password");
 
-  if (!user.verify) throw HttpError(403, "Verify your email");
-
   if (!user) throw HttpError(401, "Email or password is wrong");
+
+  if (!user.verify) throw HttpError(403, "Verify your email");
 
   const passwdIsValid = await user.checkPassword(password, user.password);
 
