@@ -5,13 +5,20 @@
     "title": "Swagger test backend water app",
     "description": "Here you can test and see what routes are on our server"
   },
-  "consumes": ["application/json"],
-  "produces": ["application/json"],
-  "servers": [{ "url": "http://localhost:3000" }],
+  "consumes": ["application/json", "multipart/form-data"],
+  "produces": ["application/json", "multipart/form-data"],
+  "servers": [
+    { "url": "http://localhost:3000" },
+    { "url": "https://aqua-backend-ieu7.onrender.com/" }
+  ],
   "tags": [
     {
       "name": "Users",
       "description": "Authorization user endpoints"
+    },
+    {
+      "name": "Waters",
+      "description": "Water control endpoints"
     }
   ],
   "paths": {
@@ -235,6 +242,249 @@
           }
         }
       }
+    },
+    "/users/avatars": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Upload image",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Add image",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/AddAvatarsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddAvatarsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "File is not found.",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/water/{month}": {
+      "get": {
+        "tags": ["Waters"],
+        "summary": "Total amount of Water drink per month",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "month",
+            "required": "true",
+            "type": "string",
+            "description": "Month on which must be provided"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonthWaterResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/water/{today}": {
+      "get": {
+        "tags": ["Waters"],
+        "summary": "Total amount of Water drink per day",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "today",
+            "required": "true",
+            "type": "string",
+            "description": "Day on which must be provided"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TodayWaterResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/water": {
+      "post": {
+        "tags": ["Waters"],
+        "summary": "Adding more water to drink",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Waters object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddWaterRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddWaterResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/water/{orderId}": {
+      "put": {
+        "tags": ["Waters"],
+        "summary": "Editing more water to drink",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "orderId",
+            "required": "true",
+            "type": "string",
+            "description": "Id water drink"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Waters object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditWaterRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EditWaterResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Waters"],
+        "summary": "Deleted data water to drink",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "orderId",
+            "required": "true",
+            "type": "string",
+            "description": "Id water drink"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteWaterResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
     }
   },
   "components": {
@@ -423,6 +673,251 @@
         "example": {
           "message": "The user is logged out."
         }
+      },
+      "AddAvatarsRequest": {
+        "type": "object",
+        "required": ["avatars"],
+        "properties": {
+          "avatars": {
+            "type": "file",
+            "format": "binary"
+          }
+        }
+      },
+      "AddWaterResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Id drink water"
+          },
+          "waterVolume": {
+            "type": "number",
+            "description": "Amount of water drink"
+          },
+          "time": {
+            "type": "string",
+            "description": "Time of drinking water"
+          }
+        },
+        "example": {
+          "_id": "example9b3dfc0a5762658a",
+          "waterVolume": 300,
+          "time": "8:00"
+        }
+      },
+      "AddWaterRequest": {
+        "type": "object",
+        "required": ["waterVolume", "time"],
+        "properties": {
+          "waterVolume": {
+            "type": "number",
+            "description": "Amount of water drink",
+            "example": 300
+          },
+          "time": {
+            "type": "string",
+            "description": "Time of drinking water",
+            "example": "08:00"
+          }
+        }
+      },
+      "EditWaterResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Id drink water"
+          },
+          "date": {
+            "type": "string",
+            "description": "Date edit drink water"
+          },
+          "waterVolume": {
+            "type": "number",
+            "description": "Amount of water drink"
+          },
+          "time": {
+            "type": "string",
+            "description": "Time of drinking water"
+          }
+        },
+        "example": {
+          "_id": "example9b3dfc0a5762658a",
+          "date": "20-04-2023",
+          "waterVolume": 300,
+          "time": "8:00"
+        }
+      },
+      "EditWaterRequest": {
+        "type": "object",
+        "required": ["waterVolume", "time"],
+        "properties": {
+          "date": {
+            "type": "string",
+            "description": "Edit date of water drink",
+            "example": "20-04-2023"
+          },
+          "waterVolume": {
+            "type": "number",
+            "description": "Edit amount of water drink",
+            "example": 300
+          },
+          "time": {
+            "type": "string",
+            "description": "Edit time of drinking water",
+            "example": "08:00"
+          }
+        }
+      },
+      "DeleteWaterResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Id drink water"
+          },
+          "date": {
+            "type": "string",
+            "description": "Date edit drink water"
+          },
+          "waterVolume": {
+            "type": "number",
+            "description": "Amount of water drink"
+          },
+          "time": {
+            "type": "string",
+            "description": "Time of drinking water"
+          }
+        },
+        "example": {
+          "_id": "example9b3dfc0a5762658a",
+          "date": "20-04-2023",
+          "waterVolume": 300,
+          "time": "8:00"
+        }
+      },
+      "TodayWaterResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "description": "Id drink water"
+            },
+            "date": {
+              "type": "string",
+              "description": "Date edit drink water"
+            },
+            "waterVolume": {
+              "type": "number",
+              "description": "Amount of water drink"
+            },
+            "time": {
+              "type": "string",
+              "description": "Time of drinking water"
+            }
+          }
+        },
+        "example": [
+          {
+            "_id": "example9b3dfc0a5762658a",
+            "date": "20-04-2023",
+            "waterVolume": 300,
+            "time": "8:00"
+          },
+          {
+            "_id": "example9b3dfc0a5745678a",
+            "date": "20-04-2023",
+            "waterVolume": 500,
+            "time": "9:00"
+          },
+          {
+            "_id": "example9b3dfc0a5712348a",
+            "date": "20-04-2023",
+            "waterVolume": 600,
+            "time": "10:00"
+          }
+        ]
+      },
+      "MonthWaterResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "dateDay": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "_id": {
+                    "type": "string",
+                    "description": "Id drink water"
+                  },
+                  "date": {
+                    "type": "string",
+                    "description": "Date edit drink water"
+                  },
+                  "waterVolume": {
+                    "type": "number",
+                    "description": "Amount of water drink"
+                  },
+                  "time": {
+                    "type": "string",
+                    "description": "Time of drinking water"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "example": [
+          {
+            "20-04-2023": [
+              {
+                "_id": "example9b3dfc0a5762658a",
+                "date": "20-04-2023",
+                "waterVolume": 300,
+                "time": "8:00"
+              },
+              {
+                "_id": "example9b3dfc0a5745678a",
+                "date": "20-04-2023",
+                "waterVolume": 500,
+                "time": "9:00"
+              },
+              {
+                "_id": "example9b3dfc0a5712348a",
+                "date": "20-04-2023",
+                "waterVolume": 600,
+                "time": "10:00"
+              }
+            ]
+          },
+          {
+            "21-04-2023": [
+              {
+                "_id": "example9b3dfc0a522658a",
+                "date": "21-04-2023",
+                "waterVolume": 400,
+                "time": "8:00"
+              },
+              {
+                "_id": "example9b3dfc0a5234278a",
+                "date": "21-04-2023",
+                "waterVolume": 200,
+                "time": "9:00"
+              },
+              {
+                "_id": "example9b3dfc0a5723448a",
+                "date": "21-04-2023",
+                "waterVolume": 800,
+                "time": "10:00"
+              }
+            ]
+          }
+        ]
       }
     },
     "securitySchemes": {
