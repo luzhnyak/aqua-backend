@@ -286,6 +286,49 @@
         }
       }
     },
+    "/users/water-rate": {
+      "patch": {
+        "tags": ["Users"],
+        "summary": "User update water rate",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Update water rate object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWaterRateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateWaterRateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "401": {
+            "description": "Email or password is wrong",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
     "/water/{month}": {
       "get": {
         "tags": ["Waters"],
@@ -579,6 +622,10 @@
               "waterRate": {
                 "type": "number",
                 "description": "Water daily norm"
+              },
+              "avatarURL": {
+                "type": "string",
+                "description": "Water daily norm"
               }
             }
           },
@@ -596,7 +643,8 @@
             "verificationToken": null,
             "createdAt": "2024-01-26T18:15:16.852Z",
             "updatedAt": "2024-01-26T19:56:22.198Z",
-            "waterRate": 2000
+            "waterRate": 2000,
+            "avatarURL": "https://res.example.com/useravatar/image/upload/v1706358664/avatars/example-avatar-string.png"
           },
 
           "token": "string.string.string"
@@ -704,6 +752,29 @@
         },
         "example": {
           "avatarURL": "https://res.example.com/useravatar/image/upload/v1706358664/avatars/example-avatar-string.png"
+        }
+      },
+      "UpdateWaterRateRequest": {
+        "type": "object",
+        "required": ["waterRate"],
+        "properties": {
+          "waterRate": {
+            "type": "string",
+            "description": "User's water rate",
+            "example": 3000
+          }
+        }
+      },
+      "UpdateWaterRateResponse": {
+        "type": "object",
+        "properties": {
+          "waterRate": {
+            "type": "number",
+            "description": "Water daily norm"
+          }
+        },
+        "example": {
+            "waterRate": 2000    
         }
       },
       "AddWaterResponse": {
