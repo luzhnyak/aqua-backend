@@ -319,7 +319,50 @@
             "content": {}
           },
           "401": {
-            "description": "Email or password is wrong",
+            "description": "Not authorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/users/update-user": {
+      "put": {
+        "tags": ["Users"],
+        "summary": "User update profile",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Update user's profile",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserProfileRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateUserProfileResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
             "content": {}
           },
           "500": {
@@ -775,6 +818,100 @@
         },
         "example": {
             "waterRate": 2000    
+        }
+      },
+      "UpdateUserProfileRequest": {
+        "type": "object",
+        "required": ["gender", "name", "email"],
+        "properties": {
+          "gender": {
+            "type": "string",
+            "description": "User's gender update",
+            "example": "female"
+          },
+          "name": {
+            "type": "string",
+            "description": "User's name update",
+            "example": "Pavlo"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email update",
+            "format": "email"
+          }, 
+          "password": {
+            "type": "string",
+            "description": "User's password update, if so, field newPassword required",
+            "example": "qwerty123"
+          }, 
+          "newPassword": {
+            "type": "string",
+            "description": "Required field for password field",
+            "example": "qwerty111"
+          }
+        }
+      },
+      "UpdateUserProfileResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "User's id"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "gender": {
+            "type": "string",
+            "description": "User's status gender"
+          },
+          "verify": {
+            "type": "boolean",
+            "description": "User's status verify"
+          },
+          "verificationToken": {
+            "type": "string",
+            "description": "Verifivation's token or null"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Date created"
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "Date update"
+          },
+          "waterRate": {
+            "type": "number",
+            "description": "Water daily norm"
+          },
+          "avatarURL": {
+            "type": "string",
+            "description": "Water daily norm"
+          },
+          "token": {
+            "type": "string",
+            "description": "User's token"
+          },
+          "name": {
+            "type": "string",
+            "description": "User's name"
+          }
+        },
+        "example": {
+          "_id": "65bid6b49b3user5762658c",
+          "email": "user@example.com",
+          "verify": true,
+          "verificationToken": null,
+          "createdAt": "2024-01-26T18:15:16.852Z",
+          "updatedAt": "2024-01-27T16:00:42.219Z",
+          "token": "string.string.string",
+          "waterRate": 4000,
+          "gender": "female",
+          "avatarURL": "https://res.example.com/useravatar/image/upload/v1706358664/avatars/example-avatar-string.png",
+          "name": "Pavlo"  
         }
       },
       "AddWaterResponse": {
