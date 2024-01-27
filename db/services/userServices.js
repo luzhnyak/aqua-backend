@@ -118,3 +118,32 @@ exports.updateAvatar = async (userId, avatar) => {
 
   return user.save();
 };
+
+exports.addVerifyToken = async (email) => {
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw HttpError(404, "User not found");
+  }
+  
+  user.verificationToken = uuidv4();
+  user.save()
+  
+  return user.verificationToken;
+};
+
+exports.updatePassword = async (verificationToken, newPassword) => {
+  if (!newPassword) throw HttpError(400, "New password not found.");
+
+  const user = await User.findOne({verificationToken});
+
+
+  if (!user) {
+    throw HttpError(404, "User not found");
+  }
+  user.password = newPassword;
+  user.verificationToken = null;
+
+  return user.save();
+};

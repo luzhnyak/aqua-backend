@@ -5,6 +5,7 @@ const {
   userJoiSchema,
   userUpdateSchema,
   userEmailSchema,
+  passwordJoiSchema,
 } = require("../../schemas/userSchema");
 
 const router = express.Router();
@@ -46,5 +47,9 @@ router.put(
   authenticate,
   ctrl.updateUserData
 );
+
+router.post("/forgot-password", validateBody.checkUpdate(userEmailSchema), ctrl.forgotPassword)
+
+router.post("/forgot-password/:changePasswordToken", validateBody.checkCreate(passwordJoiSchema), ctrl.changePassword)
 
 module.exports = router;
