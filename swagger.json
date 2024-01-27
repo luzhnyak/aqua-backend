@@ -243,8 +243,8 @@
         }
       }
     },
-    "/users/avatars": {
-      "post": {
+    "/users/avatar": {
+      "patch": {
         "tags": ["Users"],
         "summary": "Upload image",
         "parameters": [],
@@ -255,7 +255,7 @@
           "content": {
             "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/AddAvatarsRequest"
+                "$ref": "#/components/schemas/AddAvatarRequest"
               }
             }
           }
@@ -266,7 +266,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AddAvatarsResponse"
+                  "$ref": "#/components/schemas/AddAvatarResponse"
                 }
               }
             }
@@ -556,6 +556,10 @@
                 "description": "User's email",
                 "format": "email"
               },
+              "gender": {
+                "type": "string",
+                "description": "User's status gender"
+              },
               "verify": {
                 "type": "boolean",
                 "description": "User's status verify"
@@ -586,6 +590,7 @@
         "example": {
           "user": {
             "_id": "example9b3dfc0a5762658a",
+            "gender": "female",
             "email": "user@example.com",
             "verify": true,
             "verificationToken": null,
@@ -647,6 +652,10 @@
                 "description": "User's email",
                 "format": "email"
               },
+              "gender": {
+                "type": "string",
+                "description": "User's status gender"
+              },
               "waterRate": {
                 "type": "number",
                 "description": "Water daily norm"
@@ -658,6 +667,7 @@
           "user": {
             "_id": "example9b3dfc0a5762658a",
             "email": "user@example.com",
+            "gender": "female",
             "waterRate": 2000
           }
         }
@@ -674,14 +684,26 @@
           "message": "The user is logged out."
         }
       },
-      "AddAvatarsRequest": {
+      "AddAvatarRequest": {
         "type": "object",
-        "required": ["avatars"],
+        "required": ["avatar"],
         "properties": {
-          "avatars": {
+          "avatar": {
             "type": "file",
             "format": "binary"
           }
+        }
+      },
+      "AddAvatarResponse": {
+        "type": "object",
+        "properties": {
+          "avatarURL": {
+            "type": "string",
+            "description": "Avatar url."
+          }
+        },
+        "example": {
+          "avatarURL": "https://res.example.com/useravatar/image/upload/v1706358664/avatars/example-avatar-string.png"
         }
       },
       "AddWaterResponse": {
