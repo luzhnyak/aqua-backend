@@ -85,24 +85,9 @@ const updateUserData = async (req, res) => {
 // ============================== Update avatar
 
 const updateAvatar = async (req, res) => {
-  if (!req.file) {
-    throw HttpError(400, "File is not found.");
-  }
+  const user = await userServices.updateAvatar(req.user.id, req.file);
 
-  const { _id } = req.user;
-  const { path: tempUpload, originalname } = req.file;
-  const resultUpload = path.join(avatarDir, `${_id}_${originalname}`);
-
-  const image = await Jimp.read(tempUpload);
-  image
-    .autocrop()
-    .cover(250, 250, Jimp.HORIZONTAL_ALIGN_CENTER || Jimp.VERTICAL_ALIGN_MIDDLE) // resize
-    .write(tempUpload); // save
-
-  await fs.rename(tempUpload, resultUpload);
-  const avatarURL = path.join("avatars", `${_id}_${originalname}`);
-
-  const user = await User.findByIdAndUpdate({ _id }, { avatarURL });
+  const avatarURL = user.avatarURL;
 
   res.json({
     avatarURL,
