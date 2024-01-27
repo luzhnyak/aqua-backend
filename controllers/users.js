@@ -2,9 +2,10 @@ const User = require("../db/models/user");
 const { HttpError, ctrlWrapper } = require("../helpers");
 const sendEmail = require("../middlewares/sendEmail");
 const { userServices } = require("../db/services");
+const { updatePassword, addVerifyToken } = require("../db/services/userServices");
 
 require("dotenv").config();
-const { BASE_URL } = process.env;
+const { BASE_URL, FRONTEND_URL } = process.env;
 
 // ============================== Register
 
@@ -111,7 +112,44 @@ const resendVerifyEmail = async (req, res) => {
   res.status(200).json({ message: "Verification email sent" });
 };
 
+
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+ 
+  const token = await addVerifyToken(email)
+
+  if(!token) {
+    throw HttpError(400, "Verification token has already been passed");
+  }
+
+  const verifyEmail = {
+    to: email,
+    subject: "Reset password for WaterApp",
+    html: `<a target="_blank" href="${FRONTEND_URL}/forgot-password/${token}">Click verify email</a>`,
+  };
+
+  // sendEmail(verifyEmail);
+
+  res.status(200).json({ message: "Password reset instructions have been sent to your email." });
+};
+
+const changePassword = async (req, res) => {
+  const { changePasswordToken } = req.params;
+  const { newPassword } = req.body
+  if (!changePasswordToken || !newPassword) {
+    throw HttpError(400, "Bad request (invalid request body)");
+  }
+
+  const passUpdate = await updatePassword(changePasswordToken, newPassword);
+  console.log(passUpdate)
+
+  res.status(200).json({ message: "Password changed successfully." });
+};
+
+
 module.exports = {
+  changePassword: ctrlWrapper(changePassword),
+  forgotPassword: ctrlWrapper(forgotPassword),
   getCurrentUser: ctrlWrapper(getCurrentUser),
   registerUser: ctrlWrapper(registerUser),
   loginUser: ctrlWrapper(loginUser),

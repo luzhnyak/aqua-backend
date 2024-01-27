@@ -372,6 +372,98 @@
         }
       }
     },
+    "/users/forgot-password": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Send change password instructions",
+        "parameters": [],
+        "requestBody": {
+          "description": "Email user object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForgotPasswordResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/users/forgot-password/{changePasswordToken}": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "User change password",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "changePasswordToken",
+            "required": "true",
+            "type": "string",
+            "description": "User's token change password"
+          }
+        ],
+        "requestBody": {
+          "description": "New object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangePasswordResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Verification token has already been passed",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
     "/water/{month}": {
       "get": {
         "tags": ["Waters"],
@@ -705,7 +797,7 @@
           "message": "Verification successful"
         }
       },
-      "ResendVerifyRequest": {
+      "ForgotPasswordRequest": {
         "type": "object",
         "required": ["email"],
         "properties": {
@@ -716,16 +808,40 @@
           }
         }
       },
-      "ResendVerifyResponse": {
+      "ForgotPasswordResponse": {
         "type": "object",
         "properties": {
           "message": {
             "type": "string",
-            "description": "Verification email sent"
+            "description": "Password reset instructions have been sent to your email"
           }
         },
         "example": {
-          "message": "Verification email sent"
+          "message": "Password reset instructions have been sent to your email"
+        }
+      },
+    
+      "ChangePasswordRequest": {
+        "type": "object",
+        "required": ["newPassword"],
+        "properties": {
+          "newPassword": {
+            "type": "string",
+            "description": "New user's email",
+            "example": "qwerty111"
+          }
+        }
+      },
+      "ChangePasswordResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Password changed successfully"
+          }
+        },
+        "example": {
+          "message": "Password changed successfully"
         }
       },
       "CurrentResponse": {
@@ -795,6 +911,29 @@
         },
         "example": {
           "avatarURL": "https://res.example.com/useravatar/image/upload/v1706358664/avatars/example-avatar-string.png"
+        }
+      },
+      "ResendVerifyRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          }
+        }
+      },
+      "ResendVerifyResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Verification email sent"
+          }
+        },
+        "example": {
+          "message": "Verification email sent"
         }
       },
       "UpdateWaterRateRequest": {

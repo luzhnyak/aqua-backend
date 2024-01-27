@@ -39,3 +39,11 @@ exports.userUpdateSchema = Joi.object({
     }),
   }),
 });
+
+exports.passwordJoiSchema = Joi.object({
+  newPassword: Joi.string()
+    .min(8)
+    .max(64)
+    .required()
+    .messages({ "any.required": "Set password for user" })
+});
