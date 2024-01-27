@@ -1,15 +1,15 @@
 const express = require("express");
 const { validateBody, authenticate } = require("../../middlewares");
+const upload = require("../../db/services/avatarServices");
 const {
   userJoiSchema,
-  userSubscriptionSchema,
+  userUpdateSchema,
   userEmailSchema,
 } = require("../../schemas/userSchema");
 
 const router = express.Router();
 
 const ctrl = require("../../controllers/users");
-const upload = require("../../db/services/avatarServices");
 
 router.post(
   "/register",
@@ -31,22 +31,20 @@ router.get("/current", authenticate, ctrl.getCurrentUser);
 
 router.post("/logout", authenticate, ctrl.logoutUser);
 
-// router.patch(
-//   "/",
-//   authenticate,
-//   validateBody.checkUpdate(userSubscriptionSchema),
-//   ctrl.updateSubscription
-// );
-
 router.patch(
   "/avatar",
   authenticate,
-  upload.single('avatar'),
+  upload.single("avatar"),
   ctrl.updateAvatar
 );
 
 router.patch("/water-rate", authenticate, ctrl.updateUserWaterRate);
 
-router.patch("/update-user", authenticate, ctrl.updateUserData);
+router.put(
+  "/update-user",
+  validateBody.checkCreate(userUpdateSchema),
+  authenticate,
+  ctrl.updateUserData
+);
 
 module.exports = router;

@@ -1,15 +1,7 @@
 const User = require("../db/models/user");
 const { HttpError, ctrlWrapper } = require("../helpers");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const gravatar = require("gravatar");
-const path = require("path");
-const fs = require("fs/promises");
-const Jimp = require("jimp");
-const { v4: uuidv4 } = require("uuid");
 const sendEmail = require("../middlewares/sendEmail");
 const { userServices } = require("../db/services");
-const avatarDir = path.join(__dirname, "../", "public", "avatars");
 
 require("dotenv").config();
 const { BASE_URL } = process.env;
