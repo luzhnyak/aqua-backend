@@ -2,8 +2,7 @@ const mongoose = require("mongoose");
 const { handleMongooseError } = require("../../helpers");
 const Schema = mongoose.Schema;
 const { genSalt, hash, compare } = require("bcrypt");
-
-const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const { regexp } = require("../../vars");
 
 // ========================== Mongoose schemas
 
@@ -18,19 +17,18 @@ const userSchema = new Schema(
     },
     email: {
       type: String,
-      match: emailRegexp,
+      match: regexp.emailRegexp,
       unique: true,
       required: [true, "Email is required"],
     },
     name: {
       type: String,
+      default: "",
     },
     gender: {
       type: String,
-
       enum: ["female", "male"],
       default: "female",
-
     },
     token: {
       type: String,
@@ -49,7 +47,6 @@ const userSchema = new Schema(
     },
     verificationToken: {
       type: String,
-      // required: [true, "Verify token is required"],
     },
   },
   { versionKey: false, timestamps: true }
