@@ -109,3 +109,12 @@ exports.updateUserData = async (id, userData) => {
 
   return user.save();
 };
+
+exports.updateAvatar = async (userId, avatar) => {
+  if (!avatar) throw HttpError(400, "File is not found.");
+
+  const user = await User.findById(userId);
+  user.avatarURL = avatar.path;
+
+  return user.save();
+};

@@ -1,5 +1,5 @@
 const express = require("express");
-const { validateBody, authenticate, upload } = require("../../middlewares");
+const { validateBody, authenticate } = require("../../middlewares");
 const {
   userJoiSchema,
   userSubscriptionSchema,
@@ -9,6 +9,7 @@ const {
 const router = express.Router();
 
 const ctrl = require("../../controllers/users");
+const upload = require("../../db/services/avatarServices");
 
 router.post(
   "/register",
@@ -38,9 +39,9 @@ router.post("/logout", authenticate, ctrl.logoutUser);
 // );
 
 router.patch(
-  "/avatars",
+  "/avatar",
   authenticate,
-  upload.single("avatar"),
+  upload.single('avatar'),
   ctrl.updateAvatar
 );
 
