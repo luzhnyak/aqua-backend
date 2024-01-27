@@ -1,10 +1,13 @@
 const { waterServices } = require("../db/services");
-const { HttpError, ctrlWrapper } = require("../helpers");
+const { ctrlWrapper } = require("../helpers");
 
-const add = async (req, res) => {
-  res.status(201).json(await waterServices.add(req.body, req.user))
-}
+exports.add = ctrlWrapper(async (req, res) => {
+  const dailyWater = await waterServices.add(req.body, req.user);
+  dailyWater.owner = dailyWater.owner._id
+  res.status(201).json(dailyWater)
+})
 
-module.exports = {
-  add: ctrlWrapper(add)
-}
+exports.remove = ctrlWrapper(async (req, res) => {
+  const deleted = await waterServices.remove(req.params.dayId, req.params.entryId, req.user._id);
+  res.json(deleted)
+})
