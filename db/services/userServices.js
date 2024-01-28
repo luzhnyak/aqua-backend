@@ -3,7 +3,7 @@ const { serverConfig } = require("../../configs");
 const { HttpError } = require("../../helpers");
 const User = require("../models/user");
 const { signToken } = require("./jwtServices");
-const  Email  = require("./emailServices");
+const Email = require("./emailServices");
 
 // ============================== Create New User
 
@@ -92,7 +92,6 @@ exports.login = async (userData) => {
   };
 };
 
-
 exports.authGoogle = async (userData) => {
   const { email } = userData;
 
@@ -179,11 +178,9 @@ exports.updateAvatar = async (userId, avatar) => {
   return user.save();
 };
 
-
 // ============================== Forgot Password
 
 exports.forgotPassword = async (email) => {
-
   const user = await User.findOne({ email });
 
   if (!user) {
@@ -197,15 +194,6 @@ exports.forgotPassword = async (email) => {
   return user.verificationToken;
 };
 
-  if (!user.verificationToken) {
-    throw HttpError(400, "Verification token create error.Try again!");
-  }
-
-  return user.save();
-};
-
-
-  
 // ============================== Update User Password
 exports.updateUserPasswordService = async (
   changePasswordToken,
@@ -217,7 +205,6 @@ exports.updateUserPasswordService = async (
 
   const user = await User.findOne({ verificationToken: changePasswordToken });
 
-
   if (!user) {
     throw HttpError(404, "User not found");
   }
@@ -225,7 +212,7 @@ exports.updateUserPasswordService = async (
   user.password = newPassword;
   user.verificationToken = null;
 
-  return user.save();
   await user.save();
 
+  return user;
 };
