@@ -3,7 +3,6 @@ const queryString = require("query-string");
 const { ctrlWrapper } = require("../helpers");
 
 const { userServices } = require("../db/services");
-const { login } = require("../db/services/userServices");
 
 exports.googleAuth = ctrlWrapper(async (req, res) => {
   const stringifiedParams = queryString.stringify({
@@ -51,7 +50,6 @@ exports.googleRedirect = ctrlWrapper(async (req, res) => {
   });
 
   const token = await userServices.authGoogle(userData.data);
-  console.log(token);
-  // userData.data.email
+
   return res.redirect(`${process.env.FRONTEND_URL}/auth?token=${token}`);
 });

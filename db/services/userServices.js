@@ -93,15 +93,18 @@ exports.login = async (userData) => {
 };
 
 exports.authGoogle = async (userData) => {
+  console.log(userData);
   const { email } = userData;
 
   let user = await User.findOne({ email }).select("+password");
 
   if (!user) {
     user = await User.create({
+      name: userData.name,
       email,
       verify: true,
       password: "google12345",
+      avatarURL: userData.picture,
     });
   }
 
