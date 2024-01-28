@@ -8,7 +8,7 @@ const { serverConfig } = require("../../configs");
 class Email {
   constructor(user, url) {
     this.to = user.email;
-    this.name = user.name ? user.name : "new User";
+    this.name = user.name ? user.name : "User";
     this.url = url;
     this.from = serverConfig.metaEmailUser;
   }
