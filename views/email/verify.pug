@@ -1,0 +1,19 @@
+extends layouts/main
+
+block content
+    tr
+        td.wrapper
+            p Dear #{name},
+            p Welcome! We are thrilled to have you as part of our community.
+            p To get started and ensure the security of your account, please verify your email by clicking on the following link:
+            table.btn.btn-primary(role="presentation", border="0", cellpadding="0", cellspacing="0")
+                tbody
+                    tr
+                        td(align="left")
+                            table(role="presentation", border="0", cellpadding="0", cellspacing="0")
+                                tbody
+                                    tr
+                                        td
+                                            a(href=url, target="_blank") Click to verify your email
+            p If the link does not work, you can copy and paste the following URL into your browser:
+            p #{url}
