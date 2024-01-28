@@ -14,12 +14,28 @@ exports.add = async (data, owner) => {
         }, {new: true});
     }
     return Water.create({
-        date: Date.now(),
+        date,
         waterRate: owner.waterRate,
         totalVolume: data.waterVolume,
         dailyEntries: [data] ,
         owner,
     });
+}
+
+exports.getCurrentDay = async owner => {
+    const date = new Date();
+    const waterList = await Water.findOne({ date: { $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()) } });
+    if (!waterList) {
+        throw HttpError(404, 'No entries for the day')
+        // return Water.create({
+        //     date,
+        //     waterRate: owner.waterRate,
+        //     totalVolume: 0,
+        //     dailyEntries: [],
+        //     owner,
+        // });
+    }
+    return waterList
 }
 
 exports.remove = async (dayId, entryId, owner) => {
