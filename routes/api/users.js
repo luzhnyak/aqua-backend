@@ -48,8 +48,16 @@ router.put(
   ctrl.updateUserData
 );
 
-router.post("/forgot-password", validateBody.checkUpdate(userEmailSchema), ctrl.forgotPassword)
+router.post(
+  "/forgot-password",
+  validateBody.checkUpdate(userEmailSchema),
+  ctrl.forgotPassword
+);
 
-router.post("/forgot-password/:changePasswordToken", validateBody.checkCreate(passwordJoiSchema), ctrl.changePassword)
+router.post(
+  "/forgot-password/:changePasswordToken",
+  validateBody.checkCreate(passwordJoiSchema),
+  ctrl.changePassword
+);
 
 module.exports = router;
