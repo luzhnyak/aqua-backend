@@ -92,6 +92,29 @@ exports.login = async (userData) => {
   };
 };
 
+
+exports.authGoogle = async (userData) => {
+  const { email } = userData;
+
+  let user = await User.findOne({ email }).select("+password");
+
+  if (!user) {
+    user = await User.create({
+      email,
+      verify: true,
+      password: "google12345",
+    });
+  }
+
+  const token = signToken(user.id);
+
+  user.token = token;
+
+  await user.save();
+
+  return token;
+};
+
 // ============================== Get Current User
 
 exports.getCurrentUser = async (id) => {
@@ -156,9 +179,11 @@ exports.updateAvatar = async (userId, avatar) => {
   return user.save();
 };
 
+
 // ============================== Forgot Password
 
 exports.forgotPassword = async (email) => {
+
   const user = await User.findOne({ email });
 
   if (!user) {
@@ -167,6 +192,11 @@ exports.forgotPassword = async (email) => {
 
   user.verificationToken = uuidv4();
 
+  user.save();
+
+  return user.verificationToken;
+};
+
   if (!user.verificationToken) {
     throw HttpError(400, "Verification token create error.Try again!");
   }
@@ -174,6 +204,8 @@ exports.forgotPassword = async (email) => {
   return user.save();
 };
 
+
+  
 // ============================== Update User Password
 exports.updateUserPasswordService = async (
   changePasswordToken,
@@ -185,6 +217,7 @@ exports.updateUserPasswordService = async (
 
   const user = await User.findOne({ verificationToken: changePasswordToken });
 
+
   if (!user) {
     throw HttpError(404, "User not found");
   }
@@ -192,5 +225,7 @@ exports.updateUserPasswordService = async (
   user.password = newPassword;
   user.verificationToken = null;
 
+  return user.save();
   await user.save();
+
 };
