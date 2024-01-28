@@ -84,10 +84,15 @@ exports.login = async (userData) => {
   await user.save();
 
   user.password = undefined;
-  user.token = undefined; //====>Це тимчасово
 
   return {
-    user,
+    user: {
+      email: user.email,
+      gender: user.gender,
+      name: user.name,
+      waterRate: user.waterRate,
+      avatarURL: user.avatarURL,
+    },
     token,
   };
 };
@@ -118,7 +123,7 @@ exports.authGoogle = async (userData) => {
 
 exports.getCurrentUser = async (id) => {
   const user = await User.findById(id).select(
-    "name email avatarURL waterRate gender"
+    "name email avatarURL waterRate gender createdAt"
   );
 
   return user;
