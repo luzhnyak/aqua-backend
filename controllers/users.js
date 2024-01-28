@@ -74,7 +74,9 @@ const logoutUser = async (req, res) => {
 const updateUserWaterRate = async (req, res) => {
   const user = await userServices.updateUserWaterRate(req.user.id, req.body);
 
-  res.status(200).json(user);
+  res.status(200).json({
+    waterRate: user.waterRate,
+  });
 };
 
 // ============================== Update User Data
@@ -82,7 +84,13 @@ const updateUserWaterRate = async (req, res) => {
 const updateUserData = async (req, res) => {
   const user = await userServices.updateUserData(req.user.id, req.body);
 
-  res.status(200).json(user);
+  res.status(200).json({
+    user: {
+      gender: user.gender,
+      name: user.name,
+      email: user.email,
+    },
+  });
 };
 
 // ============================== Update avatar
