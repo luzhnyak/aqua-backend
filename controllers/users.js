@@ -1,24 +1,24 @@
 const User = require("../db/models/user");
 const { HttpError, ctrlWrapper } = require("../helpers");
 const sendEmail = require("../middlewares/sendEmail");
-const { userServices } = require("../db/services");
-const { updatePassword, addVerifyToken } = require("../db/services/userServices");
+const { userServices, Email } = require("../db/services");
+const { serverConfig } = require("../configs");
 
 require("dotenv").config();
-const { BASE_URL, FRONTEND_URL } = process.env;
 
 // ============================== Register
 
 const registerUser = async (req, res) => {
   const { user } = await userServices.createNewUser(req.body);
 
-  const verifyEmail = {
-    to: user.email,
-    subject: "Verify email",
-    html: `<a target="_blank" href="${BASE_URL}/users/verify/${user.verificationToken}">Click verify email</a>`,
-  };
-
-  // sendEmail(verifyEmail);
+  try {
+    await new Email(
+      user,
+      `${serverConfig.frontEndUrl}/users/verify/${user.verificationToken}`
+    ).sendHello();
+  } catch (error) {
+    console.log(error);
+  }
 
   res.status(201).json({
     user: { email: user.email },
@@ -31,6 +31,16 @@ const verifyEmail = async (req, res) => {
   await userServices.verifyEmail(req.params.verificationToken);
 
   res.status(200).json({ message: "Verification successful" });
+};
+
+// ============================== Resend verify email
+
+const resendVerifyEmail = async (req, res) => {
+  const { email } = req.body;
+
+  await userServices.resendVerifyEmail(email);
+
+  res.status(200).json({ message: "Verification email sent" });
 };
 
 // ============================== Login
@@ -87,65 +97,38 @@ const updateAvatar = async (req, res) => {
   });
 };
 
-// ============================== Resend verify email
-
-const resendVerifyEmail = async (req, res) => {
-  const { email } = req.body;
-  const user = await User.findOne({ email });
-
-  if (!user) {
-    throw HttpError(404, "User not found");
-  }
-
-  if (user.verify) {
-    throw HttpError(400, "Verification has already been passed");
-  }
-
-  const verifyEmail = {
-    to: email,
-    subject: "Verify email",
-    html: `<a target="_blank" href="${BASE_URL}/users/verify/${user.verificationToken}">Click verify email</a>`,
-  };
-
-  sendEmail(verifyEmail);
-
-  res.status(200).json({ message: "Verification email sent" });
-};
-
+// ============================== Forgot Password Email
 
 const forgotPassword = async (req, res) => {
-  const { email } = req.body;
- 
-  const token = await addVerifyToken(email)
+  const user = await userServices.forgotPassword(req.body.email);
 
-  if(!token) {
-    throw HttpError(400, "Verification token has already been passed");
+  try {
+    await new Email(
+      user,
+      `${serverConfig.frontEndUrl}/forgot-password/${user.verificationToken}`
+    ).forgotPass();
+  } catch (error) {
+    console.log(error);
   }
 
-  const verifyEmail = {
-    to: email,
-    subject: "Reset password for WaterApp",
-    html: `<a target="_blank" href="${FRONTEND_URL}/forgot-password/${token}">Click verify email</a>`,
-  };
-
-  // sendEmail(verifyEmail);
-
-  res.status(200).json({ message: "Password reset instructions have been sent to your email." });
+  res.status(200).json({
+    message: "Password reset instructions have been sent to your email.",
+  });
 };
+
+// ============================== Change Password Email
 
 const changePassword = async (req, res) => {
   const { changePasswordToken } = req.params;
-  const { newPassword } = req.body
-  if (!changePasswordToken || !newPassword) {
-    throw HttpError(400, "Bad request (invalid request body)");
-  }
+  const { newPassword } = req.body;
 
-  const passUpdate = await updatePassword(changePasswordToken, newPassword);
-  console.log(passUpdate)
+  await userServices.updateUserPasswordService(
+    changePasswordToken,
+    newPassword
+  );
 
   res.status(200).json({ message: "Password changed successfully." });
 };
-
 
 module.exports = {
   changePassword: ctrlWrapper(changePassword),

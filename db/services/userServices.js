@@ -1,7 +1,10 @@
 const { v4: uuidv4 } = require("uuid");
+const { serverConfig } = require("../../configs");
 const { HttpError } = require("../../helpers");
 const User = require("../models/user");
 const { signToken } = require("./jwtServices");
+
+// ============================== Create New User
 
 exports.createNewUser = async (userData) => {
   const { email } = userData;
@@ -26,6 +29,8 @@ exports.createNewUser = async (userData) => {
   };
 };
 
+// ============================== Verify Email
+
 exports.verifyEmail = async (verificationToken) => {
   const user = await User.findOne({ verificationToken });
 
@@ -36,6 +41,27 @@ exports.verifyEmail = async (verificationToken) => {
 
   await user.save();
 };
+
+// ============================== Resend Verify Email
+
+exports.resendVerifyEmail = async (email) => {
+  const user = await User.findOne({ email });
+
+  if (!user) throw HttpError(404, "User not found");
+
+  if (user.verify) throw HttpError(400, "Verification has already been passed");
+
+  try {
+    await new Email(
+      user,
+      `${serverConfig.frontEndUrl}/users/verify/${user.verificationToken}`
+    ).sendHello();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// ============================== Login
 
 exports.login = async (userData) => {
   const { email, password } = userData;
@@ -65,6 +91,8 @@ exports.login = async (userData) => {
   };
 };
 
+// ============================== Get Current User
+
 exports.getCurrentUser = async (id) => {
   const user = await User.findById(id).select(
     "name email avatarURL waterRate gender"
@@ -73,11 +101,15 @@ exports.getCurrentUser = async (id) => {
   return user;
 };
 
+// ============================== Logout
+
 exports.logout = async (user) => {
   user.token = "";
 
   await user.save();
 };
+
+// ============================== Update Water Rate
 
 exports.updateUserWaterRate = async (id, waterRateData) => {
   const user = await User.findById(id);
@@ -85,6 +117,8 @@ exports.updateUserWaterRate = async (id, waterRateData) => {
 
   return user.save();
 };
+
+// ============================== Update User Data
 
 exports.updateUserData = async (id, userData) => {
   const user = await User.findById(id).select("+password");
@@ -110,6 +144,8 @@ exports.updateUserData = async (id, userData) => {
   return user.save();
 };
 
+// ============================== Update Avatar
+
 exports.updateAvatar = async (userId, avatar) => {
   if (!avatar) throw HttpError(400, "File is not found.");
 
@@ -119,31 +155,41 @@ exports.updateAvatar = async (userId, avatar) => {
   return user.save();
 };
 
-exports.addVerifyToken = async (email) => {
+// ============================== Forgot Password
 
+exports.forgotPassword = async (email) => {
   const user = await User.findOne({ email });
 
   if (!user) {
     throw HttpError(404, "User not found");
   }
-  
+
   user.verificationToken = uuidv4();
-  user.save()
-  
-  return user.verificationToken;
+
+  if (!user.verificationToken) {
+    throw HttpError(400, "Verification token create error.Try again!");
+  }
+
+  return user.save();
 };
 
-exports.updatePassword = async (verificationToken, newPassword) => {
-  if (!newPassword) throw HttpError(400, "New password not found.");
+// ============================== Update User Password
+exports.updateUserPasswordService = async (
+  changePasswordToken,
+  newPassword
+) => {
+  if (!changePasswordToken || !newPassword) {
+    throw HttpError(400, "Bad request (invalid request body)");
+  }
 
-  const user = await User.findOne({verificationToken});
-
+  const user = await User.findOne({ verificationToken: changePasswordToken });
 
   if (!user) {
     throw HttpError(404, "User not found");
   }
+
   user.password = newPassword;
   user.verificationToken = null;
 
-  return user.save();
+  await user.save();
 };
