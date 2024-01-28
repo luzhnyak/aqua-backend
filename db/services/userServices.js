@@ -65,12 +65,18 @@ exports.login = async (userData) => {
   };
 };
 
-exports.loginGoogle = async (userData) => {
+exports.authGoogle = async (userData) => {
   const { email } = userData;
 
-  const user = await User.findOne({ email }).select("+password");
+  let user = await User.findOne({ email }).select("+password");
 
-  if (!user) throw HttpError(401, "Email or password is wrong");
+  if (!user) {
+    user = await User.create({
+      email,
+      verify: true,
+      password: "google12345",
+    });
+  }
 
   const token = signToken(user.id);
 
