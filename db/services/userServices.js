@@ -65,6 +65,22 @@ exports.login = async (userData) => {
   };
 };
 
+exports.loginGoogle = async (userData) => {
+  const { email } = userData;
+
+  const user = await User.findOne({ email }).select("+password");
+
+  if (!user) throw HttpError(401, "Email or password is wrong");
+
+  const token = signToken(user.id);
+
+  user.token = token;
+
+  await user.save();
+
+  return token;
+};
+
 exports.getCurrentUser = async (id) => {
   const user = await User.findById(id).select(
     "name email avatarURL waterRate gender"
@@ -120,24 +136,22 @@ exports.updateAvatar = async (userId, avatar) => {
 };
 
 exports.addVerifyToken = async (email) => {
-
   const user = await User.findOne({ email });
 
   if (!user) {
     throw HttpError(404, "User not found");
   }
-  
+
   user.verificationToken = uuidv4();
-  user.save()
-  
+  user.save();
+
   return user.verificationToken;
 };
 
 exports.updatePassword = async (verificationToken, newPassword) => {
   if (!newPassword) throw HttpError(400, "New password not found.");
 
-  const user = await User.findOne({verificationToken});
-
+  const user = await User.findOne({ verificationToken });
 
   if (!user) {
     throw HttpError(404, "User not found");

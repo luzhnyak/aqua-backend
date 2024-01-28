@@ -1,9 +1,9 @@
 const userServices = require("./userServices");
 const jwtServices = require("./jwtServices");
-const waterServices = require('./waterSerwices');
+const waterServices = require("./waterSerwices");
 
 module.exports = {
-    userServices,
+  userServices,
   jwtServices,
-    waterServices,
+  waterServices,
 };
