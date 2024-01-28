@@ -15,7 +15,7 @@ router.get('/month');
 
 router.route('/:dayId/:entryId')
   .all(waterMiddleware.checkDayEntryById)
-  .put(validateBody.checkUpdate(waterSchema.addWater))
+  .put(validateBody.checkUpdate(waterSchema.addWater), waterControllers.update)
   .delete(waterControllers.remove);
 
 module.exports = router;
