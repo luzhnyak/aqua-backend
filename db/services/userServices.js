@@ -197,9 +197,7 @@ exports.forgotPassword = async (email) => {
 
   user.verificationToken = uuidv4();
 
-  user.save();
-
-  return user.verificationToken;
+  return user.save();
 };
 
 // ============================== Update User Password
