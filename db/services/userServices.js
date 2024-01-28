@@ -3,6 +3,7 @@ const { serverConfig } = require("../../configs");
 const { HttpError } = require("../../helpers");
 const User = require("../models/user");
 const { signToken } = require("./jwtServices");
+const  Email  = require("./emailServices");
 
 // ============================== Create New User
 
