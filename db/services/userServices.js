@@ -126,10 +126,19 @@ exports.authGoogle = async (userData) => {
 
 exports.getCurrentUser = async (id) => {
   const user = await User.findById(id).select(
-    "name email avatarURL waterRate gender createdAt"
+    "name email gender waterRate avatarURL createdAt"
   );
 
-  return user;
+  return {
+    user: {
+      name: user.name,
+      email: user.email,
+      gender: user.gender,
+      waterRate: user.waterRate,
+      avatarURL: user.avatarURL,
+      createdAt: user.createdAt,
+    },
+  };
 };
 
 // ============================== Logout
@@ -154,6 +163,8 @@ exports.updateUserWaterRate = async (id, waterRateData) => {
 exports.updateUserData = async (id, userData) => {
   const user = await User.findById(id).select("+password");
 
+  let message = undefined;
+
   if ("password" in userData) {
     const isValidPassword = await user.checkPassword(
       userData.password,
@@ -163,6 +174,8 @@ exports.updateUserData = async (id, userData) => {
     if (!isValidPassword) throw HttpError(401, "Password is wrong");
 
     user.password = userData.newPassword;
+
+    message = "Password changed successfully";
   }
 
   Object.keys(userData).forEach((key) => {
@@ -172,7 +185,14 @@ exports.updateUserData = async (id, userData) => {
     user[key] = userData[key];
   });
 
-  return user.save();
+  await user.save();
+
+  user.password = undefined;
+
+  return {
+    user,
+    message,
+  };
 };
 
 // ============================== Update Avatar

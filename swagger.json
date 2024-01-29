@@ -725,10 +725,6 @@
           "user": {
             "type": "object",
             "properties": {
-              "_id": {
-                "type": "string",
-                "description": "User's id"
-              },
               "email": {
                 "type": "string",
                 "description": "User's email",
@@ -738,21 +734,9 @@
                 "type": "string",
                 "description": "User's status gender"
               },
-              "verify": {
-                "type": "boolean",
-                "description": "User's status verify"
-              },
-              "verificationToken": {
+               "name": {
                 "type": "string",
-                "description": "Verifivation's token or null"
-              },
-              "createdAt": {
-                "type": "string",
-                "description": "Date created"
-              },
-              "updatedAt": {
-                "type": "string",
-                "description": "Date update"
+                "description": "User's name"
               },
               "waterRate": {
                 "type": "number",
@@ -760,7 +744,7 @@
               },
               "avatarURL": {
                 "type": "string",
-                "description": "Water daily norm"
+                "description": "User's avatar url"
               }
             }
           },
@@ -771,13 +755,9 @@
         },
         "example": {
           "user": {
-            "_id": "example9b3dfc0a5762658a",
-            "gender": "female",
             "email": "user@example.com",
-            "verify": true,
-            "verificationToken": null,
-            "createdAt": "2024-01-26T18:15:16.852Z",
-            "updatedAt": "2024-01-26T19:56:22.198Z",
+            "gender": "female",
+            "name":"Ricardo",
             "waterRate": 2000,
             "avatarURL": "https://res.example.com/useravatar/image/upload/v1706358664/avatars/example-avatar-string.png"
           },
@@ -850,9 +830,9 @@
           "user": {
             "type": "object",
             "properties": {
-              "_id": {
-                "type": "string",
-                "description": "User's id"
+              "name":{
+                "type":"string",
+                "description":"User's name"
               },
               "email": {
                 "type": "string",
@@ -866,16 +846,26 @@
               "waterRate": {
                 "type": "number",
                 "description": "Water daily norm"
+              },
+              "avatarURL":{
+                "type":"string",
+                "description":"User's avatar url"
+              },
+              "createdAt":{
+                "type":"string",
+                "description":"User date create",
+                "format":"date"
               }
             }
           }
         },
         "example": {
           "user": {
-            "_id": "example9b3dfc0a5762658a",
+            "name":"Ricardo",
             "email": "user@example.com",
             "gender": "female",
-            "waterRate": 2000
+            "waterRate": 2000,
+            "avatarURL":"https://res.example.com/useravatar/image/upload/v1706358664/avatars/example-avatar-string.png"
           }
         }
       },
@@ -993,11 +983,8 @@
       "UpdateUserProfileResponse": {
         "type": "object",
         "properties": {
-          "_id": {
-            "type": "string",
-            "description": "User's id"
-          },
-          "email": {
+         "user":{
+           "email": {
             "type": "string",
             "description": "User's email",
             "format": "email"
@@ -1006,51 +993,23 @@
             "type": "string",
             "description": "User's status gender"
           },
-          "verify": {
-            "type": "boolean",
-            "description": "User's status verify"
-          },
-          "verificationToken": {
-            "type": "string",
-            "description": "Verifivation's token or null"
-          },
-          "createdAt": {
-            "type": "string",
-            "description": "Date created"
-          },
-          "updatedAt": {
-            "type": "string",
-            "description": "Date update"
-          },
-          "waterRate": {
-            "type": "number",
-            "description": "Water daily norm"
-          },
-          "avatarURL": {
-            "type": "string",
-            "description": "Water daily norm"
-          },
-          "token": {
-            "type": "string",
-            "description": "User's token"
-          },
           "name": {
             "type": "string",
             "description": "User's name"
           }
+         },
+         "message":{
+          "type":"string",
+          "description":"Updated password success message "
+         }
         },
         "example": {
-          "_id": "65bid6b49b3user5762658c",
+          "user":{
           "email": "user@example.com",
-          "verify": true,
-          "verificationToken": null,
-          "createdAt": "2024-01-26T18:15:16.852Z",
-          "updatedAt": "2024-01-27T16:00:42.219Z",
-          "token": "string.string.string",
-          "waterRate": 4000,
           "gender": "female",
-          "avatarURL": "https://res.example.com/useravatar/image/upload/v1706358664/avatars/example-avatar-string.png",
           "name": "Pavlo"  
+        },
+        "message":"Password changed successfully"
         }
       },
       "AddWaterResponse": {
