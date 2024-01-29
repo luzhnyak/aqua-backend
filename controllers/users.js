@@ -58,7 +58,7 @@ const loginUser = async (req, res) => {
 const getCurrentUser = async (req, res) => {
   const user = await userServices.getCurrentUser(req.user.id);
 
-  res.json({ user });
+  res.json(user);
 };
 
 // ============================== Logout User
@@ -86,10 +86,11 @@ const updateUserData = async (req, res) => {
 
   res.status(200).json({
     user: {
-      gender: user.gender,
-      name: user.name,
-      email: user.email,
+      gender: user.user.gender,
+      name: user.user.name,
+      email: user.user.email,
     },
+    message: user.message,
   });
 };
 
