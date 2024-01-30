@@ -464,17 +464,32 @@
         }
       }
     },
-    "/water/{month}": {
+    "/water/month": {
       "get": {
         "tags": ["Waters"],
         "summary": "Total amount of Water drink per month",
         "parameters": [
           {
-            "in": "path",
-            "name": "month",
+            "in": "query",
+            "name": "year",
             "required": "true",
-            "type": "string",
-            "description": "Month on which must be provided"
+            "description": "The year for which water data is requested",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "in": "query",
+            "name": "month",
+            "description": "The month for which water data is requested",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32", 
+              "minimum": 0,
+              "maximum": 11 
+            }
           }
         ],
         "security": [{ "Bearer": [] }],
