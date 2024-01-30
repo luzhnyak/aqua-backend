@@ -1,5 +1,5 @@
 const express = require('express');
-const {validateBody, authenticate, waterMiddleware} = require('../../middlewares');
+const {validateBody, authenticate, waterMiddleware, validateQuery} = require('../../middlewares');
 const { waterSchema } = require('../../schemas');
 const waterControllers = require('../../controllers/waterControllers');
 
@@ -11,7 +11,7 @@ router.route('/')
 .get(waterControllers.getCurrentDay)
 .post(validateBody.checkCreate(waterSchema.addWater), waterControllers.add)
 
-router.get('/month');
+router.get('/month',validateQuery(waterSchema.query), waterControllers.getMonth);
 
 router.route('/:dayId/:entryId')
   .all(waterMiddleware.checkDayEntryById)

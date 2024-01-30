@@ -30,6 +30,11 @@ const waterSchema = new Schema(
             default: 0,
             required: [true, 'Total is required']
         },
+        progress: {
+            type: Number,
+            default: 0,
+            required: [true, 'Progress is required']
+        },
         dailyEntries: [entriesSchema],
         owner: {
             type: Schema.Types.ObjectId,
@@ -40,10 +45,15 @@ const waterSchema = new Schema(
     { versionKey: false, timestamps: true }
 );
 
-// waterSchema.pre('save', async function (next) {
-//     this.percentOfRate = this.dailyEntries.reduce((acc, { waterVolume }) => acc + waterVolume, 0) / this.waterRate * 100;
-//     next()
-// })
+// waterSchema.methods.getPercent = function () {
+//     this.progress = (this.totalVolume / this.waterRate) * 100;
+//     console.log('this.progress:', this.progress);
+// };
+waterSchema.pre(['save', 'updateOne', 'findOneAndUpdate', 'findByIdAndUpdate'], function (next) {
+    this.progress = (this.totalVolume / this.waterRate) * 100;
+    console.log('this.progress:', this.progress);
+    next();
+});
 
 waterSchema.post('save', handleMongooseError);
 

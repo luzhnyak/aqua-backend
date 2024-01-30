@@ -32,9 +32,7 @@ exports.getCurrentDay = async owner => {
     const waterList = await Water.findOne({
         date: { $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()) }, owner
     });
-    if (!waterList) {
-        throw HttpError(404, 'No entries for the day');
-    }
+    if (!waterList) throw HttpError(404, 'No entries for the day')
     return waterList;
 };
 
@@ -79,6 +77,16 @@ exports.remove = async (dayId, entryId) => {
         { new: true }
     );
 };
+
+exports.getMonth = async (year, month, owner) => {
+    const selectedDates = await Water.find({
+        date: { $gte: new Date(year, month), $lt: new Date(year, month + 1) },
+        owner,
+    }).select(['-owner', '-updatedAt', '-createdAt']);
+    console.log("selectedDates:", selectedDates)
+    if (!selectedDates) throw HttpError(404, 'No entries for this month');
+    return selectedDates
+}
 
 exports.checkById = id => {
     const idIsValid = Types.ObjectId.isValid(id);
