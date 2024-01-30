@@ -19,6 +19,14 @@ exports.update = ctrlWrapper(async (req, res) => {
 })
 
 exports.remove = ctrlWrapper(async (req, res) => {
-  const deleted = await waterServices.remove(req.params.dayId, req.params.entryId, req.user._id);
+  const deleted = await waterServices.remove(req.params.dayId, req.params.entryId);
   res.json(deleted)
+})
+
+exports.getMonth = ctrlWrapper(async (req, res) => {
+  const date = new Date();
+  const { user, query: { year = date.getFullYear(), month = date.getMonth()} } = req;
+  const selectedDates = await waterServices.getMonth(year, month, user)
+  // selectedDates.
+  res.json(selectedDates)
 })
