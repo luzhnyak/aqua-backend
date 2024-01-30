@@ -26,7 +26,7 @@ exports.remove = ctrlWrapper(async (req, res) => {
 exports.getMonth = ctrlWrapper(async (req, res) => {
   const date = new Date();
   const { user, query: { year = date.getFullYear(), month = date.getMonth()} } = req;
-  const selectedDates = await waterServices.getMonth(year, month, user)
-  // selectedDates.
+  let selectedDates = await waterServices.getMonth(year, month, user);
+  selectedDates = selectedDates.map(i => ({ ...i._doc, dailyEntries: i.dailyEntries.length }));
   res.json(selectedDates)
 })

@@ -3,49 +3,38 @@ const { HttpError } = require("../../helpers");
 const { Water } = require("../models/water");
 
 exports.add = async (data, owner) => {
-  const date = new Date();
-  const waterList = await Water.findOne({
-    date: {
-      $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
-    },
-    owner,
-  });
-  if (waterList) {
-    return Water.findByIdAndUpdate(
-      waterList._id,
-      {
-        $inc: {
-          totalVolume: +data.waterVolume,
-        },
-        $push: { dailyEntries: data },
-        progress:
-          ((waterList.totalVolume + Number(data.waterVolume)) /
-            owner.waterRate) *
-          100,
-      },
-      { new: true }
-    );
-  }
-  return Water.create({
-    date,
-    waterRate: owner.waterRate,
-    totalVolume: data.waterVolume,
-    progress: (data.waterVolume / owner.waterRate) * 100,
-    dailyEntries: [data],
-    owner,
-  });
+    const date = new Date();
+    const waterList = await Water.findOne({
+        date: { $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()) },
+        owner,
+    });
+    if (waterList) {
+        return Water.findByIdAndUpdate(
+            waterList._id,
+            {
+                waterRate: owner.waterRate,
+                $inc: { totalVolume: +data.waterVolume },
+                $push: { dailyEntries: data },
+            },
+            { new: true }
+        );
+    }
+    return Water.create({
+        date,
+        waterRate: owner.waterRate,
+        totalVolume: data.waterVolume,
+        dailyEntries: [data],
+        owner,
+    });
 };
 
-exports.getCurrentDay = async (owner) => {
-  const date = new Date();
-  const waterList = await Water.findOne({
-    date: {
-      $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
-    },
-    owner,
-  });
-  if (!waterList) throw HttpError(404, "No entries for the day");
-  return waterList;
+exports.getCurrentDay = async owner => {
+    const date = new Date();
+    const waterList = await Water.findOne({
+        date: { $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()) }, owner
+    });
+    if (!waterList) throw HttpError(404, 'No entries for the day')
+    return waterList;
 };
 
 exports.update = async (dayId, entryId, data) => {
@@ -93,13 +82,22 @@ exports.remove = async (dayId, entryId) => {
 
 exports.getMonth = async (year, month, owner) => {
   const selectedDates = await Water.find({
-    date: { $gte: new Date(year, month), $lt: new Date(year, month + 1) },
-    owner,
-  }).select(["-owner", "-updatedAt", "-createdAt"]);
-  console.log("selectedDates:", selectedDates);
+      date: { $gte: new Date(year, month), $lt: new Date(year, month + 1) },
+      owner,
+  }).select(['date', 'waterRate', 'progress', 'dailyEntries']);
   if (!selectedDates) throw HttpError(404, "No entries for this month");
   return selectedDates;
 };
+
+exports.updateWoterRate = owner => {
+    const date = new Date();
+    return Water.findOneAndUpdate(
+        {
+            date: { $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()) },
+            owner,
+        },
+        { waterRate: owner.waterRate }
+    );}
 
 exports.checkById = (id) => {
   const idIsValid = Types.ObjectId.isValid(id);
