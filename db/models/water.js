@@ -45,35 +45,16 @@ const waterSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-// waterSchema.methods.getPercent = function () {
-//     this.progress = (this.totalVolume / this.waterRate) * 100;
-//     console.log('this.progress:', this.progress);
-// };
-// waterSchema.pre(["create", "save"], function (next) {
-//   //   console.log(this);
-//   this.progress = (this.totalVolume / this.waterRate) * 100;
-//   console.log("this.progress create:", this.progress);
-//   next();
-// });
+waterSchema.pre('save', function (next) {
+    this.progress = (this.totalVolume / this.waterRate) * 100;
+    next();
+});
 
-// waterSchema.pre(
-//   ["updateOne", "findOneAndUpdate", "findByIdAndUpdate"],
-//   function (next) {
-//     // console.log(this.updatedUser);
-//     const updatedData = this.getUpdate();
+waterSchema.post('findOneAndUpdate', function (doc) {
+    doc.progress = Math.round((doc.totalVolume / doc.waterRate) * 100);
+    doc.save()
+});
 
-//     if (updatedData.$set && updatedData.$set.progress) {
-//       updatedData.$set.progress = 50;
-//       // (updatedData.$set.totalVolume / updatedData.$set.waterRate) * 100;
-//     }
-
-//     console.log(updatedData);
-//     console.log("this.progress: update", updatedData.$set);
-
-//     next();
-//   }
-// );
-
-waterSchema.post("save", handleMongooseError);
+waterSchema.post('save', handleMongooseError);
 
 exports.Water = model("water", waterSchema);
