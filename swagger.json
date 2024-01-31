@@ -1230,35 +1230,14 @@
               "type":"number",
               "description": "Amount of water drink"
             },
-            "totalVolume":{
-              "type":"number",
-              "description":"Total amount of drink water"
-            },
             "progress":{
               "type":"number",
               "description":"The user's progress in drinking the daily amount of water in percent"
             },
             "dailyEntries":{
-              "type":"array",
-              "items":{
-                "type":"object",
-                "properties":{
-                  "waterVolume":{
-                    "type":"number",
-                    "description":"Amount of water drink"
-                  },
-                  "time":{
-                    "type":"string",
-                    "description":"Time when water unit was drunk"
-                  },
-                  "_id": {
-                    "type": "string",
-                    "description": "Id drink water"
-                  }
-                }
-              }
+              "type":"number",
+              "description":"The number of essences of pods drunk"
             }
-
           }
         },
         "example": [
@@ -1266,74 +1245,15 @@
     "_id": "example9b3dfc0a5762658a",
     "date": "2024-01-30T12:53:26.026Z",
     "waterRate": 2000,
-    "totalVolume": 2400,
     "progress": 120,
-    "dailyEntries": [
-      {
-        "waterVolume": 300,
-        "time": "09:00",
-        "_id": "65b8f1461cac39a75a0e966a"
-      }, 
-      {
-        "waterVolume": 500,
-        "time": "09:00",
-        "_id": "65b8f1461cac39a75a0e966a"
-      }, 
-      {
-        "waterVolume": 500,
-        "time": "09:00",
-        "_id": "65b8f1461cac39a75a0e966a"
-      },
-       {
-        "waterVolume": 200,
-        "time": "09:00",
-        "_id": "65b8f1461cac39a75a0e966a"
-      },
-       {
-        "waterVolume": 500,
-        "time": "09:00",
-        "_id": "65b8f1461cac39a75a0e966a"
-      },
-       {
-        "waterVolume": 400,
-        "time": "09:00",
-        "_id": "65b8f1461cac39a75a0e966a"
-      }
-    ]
+    "dailyEntries": 6
   },
    {
     "_id": "example9b3dfc0a5762658a",
     "date": "2024-01-31T15:50:52.731Z",
     "waterRate": 2000,
-    "totalVolume": 2000,
     "progress": 100,
-    "dailyEntries": [
-      {
-        "waterVolume": 300,
-        "time": "09:00",
-        "_id": "65b8f1461cac39a75a0e966a"
-      }, 
-      {
-        "waterVolume": 500,
-        "time": "09:00",
-        "_id": "65b8f1461cac39a75a0e966a"
-      }, 
-      {
-        "waterVolume": 500,
-        "time": "09:00",
-        "_id": "65b8f1461cac39a75a0e966a"
-      },
-       {
-        "waterVolume": 200,
-        "time": "09:00",
-        "_id": "65b8f1461cac39a75a0e966a"
-      },
-       {
-        "waterVolume": 500,
-        "time": "09:00",
-        "_id": "65b8f1461cac39a75a0e966a"
-      }
-    ]
+    "dailyEntries": 5
   }
 ]
       }
