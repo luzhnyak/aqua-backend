@@ -114,7 +114,7 @@ const forgotPassword = async (req, res) => {
   try {
     await new Email(
       user,
-      `${serverConfig.frontEndUrl}/forgot-password/${user.verificationToken}`
+      `${serverConfig.frontEndUrl}/update-password/${user.verificationToken}`
     ).forgotPass();
   } catch (error) {
     console.log(error);
