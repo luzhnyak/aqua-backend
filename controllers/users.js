@@ -11,14 +11,14 @@ require("dotenv").config();
 const registerUser = async (req, res) => {
   const { user } = await userServices.createNewUser(req.body);
 
-  // try {
-  //   await new Email(
-  //     user,
-  //     `${serverConfig.frontEndUrl}/users/verify/${user.verificationToken}`
-  //   ).sendHello();
-  // } catch (error) {
-  //   console.log(error);
-  // }
+  try {
+    await new Email(
+      user,
+      `${serverConfig.frontEndUrl}/users/verify/${user.verificationToken}`
+    ).sendHello();
+  } catch (error) {
+    console.log(error);
+  }
 
   res.status(201).json({
     user: { email: user.email },
