@@ -766,6 +766,10 @@
               "avatarURL": {
                 "type": "string",
                 "description": "User's avatar url"
+              },
+              "createdAt": {
+                "type":"string",
+                "description":"User date create"
               }
             }
           },
@@ -780,7 +784,8 @@
             "gender": "female",
             "name":"Ricardo",
             "waterRate": 2000,
-            "avatarURL": "https://res.example.com/useravatar/image/upload/v1706358664/avatars/example-avatar-string.png"
+            "avatarURL": "https://res.example.com/useravatar/image/upload/v1706358664/avatars/example-avatar-string.png",
+            "createdAt": "2024-01-31T14:39:07.408Z"
           },
 
           "token": "string.string.string"

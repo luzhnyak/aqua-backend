@@ -92,6 +92,7 @@ exports.login = async (userData) => {
       name: user.name,
       waterRate: user.waterRate,
       avatarURL: user.avatarURL,
+      createdAt: user.createdAt,
     },
     token,
   };
@@ -171,7 +172,7 @@ exports.updateUserData = async (id, userData) => {
       user.password
     );
 
-    if (!isValidPassword) throw HttpError(401, "Password is wrong");
+    if (!isValidPassword) throw HttpError(400, "Password is wrong");
 
     user.password = userData.newPassword;
 
