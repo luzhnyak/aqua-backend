@@ -82,7 +82,7 @@ exports.remove = async (dayId, entryId) => {
 
 exports.getMonth = async (year, month, owner) => {
   const selectedDates = await Water.find({
-      date: { $gte: new Date(year, month), $lt: new Date(year, month + 1) },
+      date: { $gte: new Date(year, month), $lt: new Date(year, Number(month) + 1) },
       owner,
   }).select(['date', 'waterRate', 'progress', 'dailyEntries']);
   if (!selectedDates) throw HttpError(404, "No entries for this month");
