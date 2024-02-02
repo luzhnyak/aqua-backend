@@ -6,6 +6,7 @@ const {
   userUpdateSchema,
   userEmailSchema,
   passwordJoiSchema,
+  refreshTokenJoiSchema,
 } = require("../../schemas/userSchema");
 
 const router = express.Router();
@@ -58,6 +59,11 @@ router.post(
   "/forgot-password/:changePasswordToken",
   validateBody.checkCreate(passwordJoiSchema),
   ctrl.changePassword
+);
+router.post(
+  "/refresh",
+  validateBody.checkCreate(refreshTokenJoiSchema),
+  ctrl.refreshToken
 );
 
 module.exports = router;
