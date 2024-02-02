@@ -9,7 +9,7 @@ exports.add = ctrlWrapper(async (req, res) => {
 
 exports.getCurrentDay = ctrlWrapper(async (req, res) => {
   const dailyWater = await waterServices.getCurrentDay(req.user);
-  dailyWater.owner = dailyWater.owner._id
+  if (!dailyWater) return res.json({dailyEntries: [], progress: 0})
   res.json(dailyWater)
 })
 

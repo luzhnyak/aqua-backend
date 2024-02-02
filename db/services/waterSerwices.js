@@ -32,7 +32,7 @@ exports.getCurrentDay = async owner => {
     const waterList = await Water.findOne({
         date: { $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()) }, owner
     });
-    if (!waterList) throw HttpError(404, 'No entries for the day')
+  // if (!waterList) throw HttpError(404, 'No entries for the day')
     return waterList;
 };
 
@@ -98,10 +98,3 @@ exports.checkIdByOwner = async (id, owner) => {
   const isDayEntryExist = await Water.exists({ _id: id, owner });
   if (!isDayEntryExist) throw HttpError(404, "Day entry does not exist");
 };
-// {
-//     "date": "16 March 2030",
-//     "water": {
-//         "waterVolume": "150",
-//         "time": "12:00"
-//     }
-// }
