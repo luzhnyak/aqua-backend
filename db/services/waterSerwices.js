@@ -2,10 +2,10 @@ const { Types } = require("mongoose");
 const { HttpError } = require("../../helpers");
 const { Water } = require("../models/water");
 
-exports.add = async (data, owner) => {
-    const date = new Date();
+exports.add = async (date, data, owner) => {
+    const currentDate = new Date(date);
     const waterList = await Water.findOne({
-        date: { $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()) },
+        date: { $gte: new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()) },
         owner,
     });
     if (waterList) {
