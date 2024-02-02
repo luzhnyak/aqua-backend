@@ -12,7 +12,6 @@ exports.add = async (data, owner) => {
         return Water.findByIdAndUpdate(
             waterList._id,
             {
-                waterRate: owner.waterRate,
                 $inc: { totalVolume: +data.waterVolume },
                 $push: { dailyEntries: data },
             },
@@ -20,8 +19,8 @@ exports.add = async (data, owner) => {
         );
     }
     return Water.create({
-        date,
-        waterRate: owner.waterRate,
+      date,
+      waterRate: owner.waterRate,
         totalVolume: data.waterVolume,
         dailyEntries: [data],
         owner,
@@ -53,16 +52,6 @@ exports.update = async (dayId, entryId, data) => {
     },
     { new: true }
   );
-  // return Water.updateOne(
-  //     { _id: dayId, 'dailyEntries._id': entryId },
-  //     {
-  //         $inc: { totalVolume: +(data.waterVolume-entry.waterVolume) },
-  //         $set: {
-  //             'dailyEntries.$.waterVolume': data.waterVolume,
-  //             'dailyEntries.$.time': data.time,
-  //         },
-  //     }
-  // );
 };
 
 exports.remove = async (dayId, entryId) => {
@@ -89,15 +78,17 @@ exports.getMonth = async (year, month, owner) => {
   return selectedDates;
 };
 
-exports.updateWoterRate = owner => {
+exports.updateWaterRate = owner => {
     const date = new Date();
     return Water.findOneAndUpdate(
         {
             date: { $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()) },
             owner,
         },
-        { waterRate: owner.waterRate }
-    );}
+        { waterRate: owner.waterRate },
+        { new: true }
+    );
+};
 
 exports.checkById = (id) => {
   const idIsValid = Types.ObjectId.isValid(id);
@@ -107,3 +98,10 @@ exports.checkIdByOwner = async (id, owner) => {
   const isDayEntryExist = await Water.exists({ _id: id, owner });
   if (!isDayEntryExist) throw HttpError(404, "Day entry does not exist");
 };
+// {
+//     "date": "16 March 2030",
+//     "water": {
+//         "waterVolume": "150",
+//         "time": "12:00"
+//     }
+// }

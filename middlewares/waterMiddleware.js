@@ -7,3 +7,8 @@ exports.checkDayEntryById = ctrlWrapper(async (req, res, next) => {
     await waterServices.checkIdByOwner(req.params.dayId, req.user)
     next()
 })
+
+exports.updateWaterRate = ctrlWrapper(async (req, res, next) => {
+    await waterServices.updateWaterRate(req.user)
+    next()
+})

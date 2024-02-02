@@ -5,7 +5,7 @@ const waterControllers = require('../../controllers/waterControllers');
 
 const router = express.Router();
 
-router.use(authenticate)
+router.use(authenticate, waterMiddleware.updateWaterRate)
 
 router.route('/')
 .get(waterControllers.getCurrentDay)
