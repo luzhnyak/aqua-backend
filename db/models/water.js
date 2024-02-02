@@ -51,6 +51,7 @@ waterSchema.pre('save', function (next) {
 });
 
 waterSchema.post('findOneAndUpdate', function (doc) {
+  if (!doc) return
     doc.progress = Math.floor((doc.totalVolume / doc.waterRate) * 100);
     doc.save()
 });
