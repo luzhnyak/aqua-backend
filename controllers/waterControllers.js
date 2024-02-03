@@ -2,13 +2,14 @@ const { waterServices } = require("../db/services");
 const { ctrlWrapper } = require("../helpers");
 
 exports.add = ctrlWrapper(async (req, res) => {
-  const dailyWater = await waterServices.add(req.body, req.user);
+  const dailyWater = await waterServices.add(req.body.date, req.body.water, req.user);
   dailyWater.owner = dailyWater.owner._id
   res.status(201).json(dailyWater)
 })
 
 exports.getCurrentDay = ctrlWrapper(async (req, res) => {
-  const dailyWater = await waterServices.getCurrentDay(req.user);
+  const { date } = req.params;
+  const dailyWater = await waterServices.getCurrentDay(date.replaceAll('-', ' '), req.user);
   if (!dailyWater) return res.json({dailyEntries: [], progress: 0})
   res.json(dailyWater)
 })
@@ -25,13 +26,14 @@ exports.remove = ctrlWrapper(async (req, res) => {
 
 exports.getMonth = ctrlWrapper(async (req, res) => {
   const date = new Date();
-  const { user, query: { year = date.getFullYear(), month = date.getMonth()} } = req;
+  const { user, query: { year = date.getFullYear(), month = date.toLocaleString('en', {month: 'long'})} } = req;
   let selectedDates = await waterServices.getMonth(year, month, user);
-  selectedDates = selectedDates.map(i => ({
-      ...i._doc,
-      date: `${i.date.getDate()}, ${i.date.toLocaleString('en', { month: 'long' })}`,
+  selectedDates = selectedDates.map(i => {
+    const [day, month] = i.date.split(' ')
+      return {...i._doc,
+      date: `${day}, ${month}`,
       waterRate: i.waterRate / 1000,
-      dailyEntries: i.dailyEntries.length,
-  }));
+      dailyEntries: i.dailyEntries.length,}
+  });
   res.json(selectedDates)
 })

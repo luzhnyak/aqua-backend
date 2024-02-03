@@ -2,10 +2,9 @@ const { Types } = require("mongoose");
 const { HttpError } = require("../../helpers");
 const { Water } = require("../models/water");
 
-exports.add = async (data, owner) => {
-    const date = new Date();
+exports.add = async (date, data, owner) => {
     const waterList = await Water.findOne({
-        date: { $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()) },
+        date,
         owner,
     });
     if (waterList) {
@@ -27,13 +26,14 @@ exports.add = async (data, owner) => {
     });
 };
 
-exports.getCurrentDay = async owner => {
-    const date = new Date();
-    const waterList = await Water.findOne({
-        date: { $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()) }, owner
-    });
-  // if (!waterList) throw HttpError(404, 'No entries for the day')
-    return waterList;
+exports.getCurrentDay = async (date, owner) => {
+    // const date = new Date();
+    // const waterList = await Water.findOne({
+    //     // date: { $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()) }, owner
+    //     date: `${date.getDate()} ${date.toLocaleString('en', {month: 'long'})} ${date.getFullYear()}`, owner
+    // });
+  // return waterList;
+  return Water.findOne({date, owner})
 };
 
 exports.update = async (dayId, entryId, data) => {
@@ -71,7 +71,7 @@ exports.remove = async (dayId, entryId) => {
 
 exports.getMonth = async (year, month, owner) => {
   const selectedDates = await Water.find({
-      date: { $gte: new Date(year, month), $lt: new Date(year, Number(month) + 1) },
+      date: { $regex: `${month} ${year}` },
       owner,
   }).select(['date', 'waterRate', 'progress', 'dailyEntries']);
   if (!selectedDates) throw HttpError(404, "No entries for this month");

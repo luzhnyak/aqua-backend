@@ -1,7 +1,7 @@
 const Joi = require('joi');
-const { regexp } = require('../vars');
+const { regexp, constants } = require('../vars');
 
-exports.addWater = Joi.object({
+const water = Joi.object({
     waterVolume: Joi.number().min(1).max(5000).required().messages({
         'number.base': 'WaterVolume should be a type of number',
         'number.min': 'Min value 1 ml',
@@ -11,17 +11,29 @@ exports.addWater = Joi.object({
     time: Joi.string()
         .pattern(regexp.time)
         .required()
-        .messages({ 'any.required': 'Time is required' }),
+        .messages({ 'any.required': 'Time is required'}),
 });
+
+exports.addWater = Joi.object({
+    date: Joi.string().pattern(regexp.date).required().messages({
+        'any.required': 'Date is required', 'string.pattern.base': 'Date mast be "d Month yyyy" format' 
+    }),
+    water,
+});
+
+exports.update = water;
 
 exports.query = Joi.object({
     year: Joi.number().min(1970).messages({
         'number.base': 'Year should be a type of number',
         'number.min': 'Min value 1970 year',
     }),
-    month: Joi.number().min(0).max(11).messages({
-        'number.base': 'Month should be a type of number',
-        'number.min': 'Min value 0',
-        'number.max': 'Max value 11',
+    month: Joi.string().valid(...constants.MONTH),
+});
+
+exports.getDay = Joi.object({
+    date: Joi.string().pattern(regexp.dateParams).required().messages({
+        'any.required': 'Date is required',
+        'string.pattern.base': 'Date mast be "d-Month-yyyy" format',
     }),
 });

@@ -17,7 +17,7 @@ const entriesSchema = new Schema({
 const waterSchema = new Schema(
   {
     date: {
-      type: Date,
+      type: String,
       required: [true, "Date is required"],
     },
     waterRate: {
