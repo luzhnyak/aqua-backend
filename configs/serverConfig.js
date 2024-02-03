@@ -1,8 +1,8 @@
 const serverConfig = {
   jwtSecret: process.env.SECRET_KEY ?? "secret-phrase",
-  jwtExpires: process.env.JWT_EXPIRES ?? "15s",
+  jwtExpires: process.env.JWT_EXPIRES ?? "14d",
   refreshJwtTokenSecret: process.env.REFRESH_SECRET_KEY ?? "secret-phrase",
-  refreshJwtTokenExpires: process.env.REFRESH_SECRET_EXPIRES ?? "45s",
+  refreshJwtTokenExpires: process.env.REFRESH_SECRET_EXPIRES ?? "7d",
   cloudinaryName: process.env.CLOUDINARY_NAME ?? "some-name",
   cloudinaryKey: process.env.CLOUDINARY_KEY ?? "some-key",
   cloudinarySecret: process.env.CLOUDINARY_SECRET ?? "some-secret",
