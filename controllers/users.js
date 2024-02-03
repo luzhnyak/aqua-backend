@@ -46,12 +46,19 @@ const resendVerifyEmail = async (req, res) => {
 // ============================== Login
 
 const loginUser = async (req, res) => {
-  const { token, user } = await userServices.login(req.body);
+  const { token, user, refreshToken } = await userServices.login(req.body);
 
   res.status(200).json({
     user,
     token,
+    refreshToken,
   });
+};
+
+const refreshToken = async (req, res) => {
+  const tokens = await userServices.refreshUserToken(req.body.refreshToken);
+
+  res.json(tokens);
 };
 
 // ============================== Get current User
@@ -151,4 +158,5 @@ module.exports = {
   updateAvatar: ctrlWrapper(updateAvatar),
   verifyEmail: ctrlWrapper(verifyEmail),
   resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
+  refreshToken: ctrlWrapper(refreshToken),
 };

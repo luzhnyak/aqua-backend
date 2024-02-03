@@ -33,6 +33,9 @@ const userSchema = new Schema(
     token: {
       type: String,
     },
+    refreshToken: {
+      type: String,
+    },
     waterRate: {
       type: Number,
       max: 15000,

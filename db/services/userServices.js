@@ -2,7 +2,11 @@ const { v4: uuidv4 } = require("uuid");
 const { serverConfig } = require("../../configs");
 const { HttpError } = require("../../helpers");
 const User = require("../models/user");
-const { signToken } = require("./jwtServices");
+const {
+  signToken,
+  singRefreshToken,
+  checkRefreshToken,
+} = require("./jwtServices");
 const Email = require("./emailServices");
 
 // ============================== Create New User
@@ -78,8 +82,10 @@ exports.login = async (userData) => {
   if (!passwdIsValid) throw HttpError(401, "Email or password is wrong");
 
   const token = signToken(user.id);
+  const refreshToken = singRefreshToken(user.id);
 
   user.token = token;
+  user.refreshToken = refreshToken;
 
   await user.save();
 
@@ -95,11 +101,13 @@ exports.login = async (userData) => {
       createdAt: user.createdAt,
     },
     token,
+    refreshToken,
   };
 };
 
+// ============================== AuthGoogle
+
 exports.authGoogle = async (userData) => {
-  console.log(userData);
   const { email } = userData;
 
   let user = await User.findOne({ email }).select("+password");
@@ -121,6 +129,27 @@ exports.authGoogle = async (userData) => {
   await user.save();
 
   return token;
+};
+
+// ============================== Refresh Token
+
+exports.refreshUserToken = async (oldRefreshToken) => {
+  const id = checkRefreshToken(oldRefreshToken);
+  const user = await User.findOne({ refreshToken: oldRefreshToken });
+
+  if (!user) throw HttpError(403, "Token invalid");
+
+  const token = signToken(id);
+  const refreshToken = singRefreshToken(id);
+
+  user.refreshToken = refreshToken;
+
+  await user.save();
+
+  return {
+    token,
+    refreshToken,
+  };
 };
 
 // ============================== Get Current User

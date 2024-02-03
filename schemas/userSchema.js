@@ -45,5 +45,9 @@ exports.passwordJoiSchema = Joi.object({
     .min(8)
     .max(64)
     .required()
-    .messages({ "any.required": "Set password for user" })
+    .messages({ "any.required": "Set password for user" }),
+});
+
+exports.refreshTokenJoiSchema = Joi.object({
+  refreshToken: Joi.string().required(),
 });

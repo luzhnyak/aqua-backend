@@ -6,6 +6,11 @@ exports.signToken = (id) =>
     expiresIn: serverConfig.jwtExpires,
   });
 
+exports.singRefreshToken = (id) =>
+  jwt.sign({ id }, serverConfig.refreshJwtTokenSecret, {
+    expiresIn: serverConfig.refreshJwtTokenExpires,
+  });
+
 exports.checkToken = (token) => {
   if (!token) throw HttpError(401, "Not authorized");
 
@@ -16,4 +21,12 @@ exports.checkToken = (token) => {
   } catch (err) {
     throw HttpError(401, "Not authorized");
   }
+};
+
+exports.checkRefreshToken = (token) => {
+  if (!token) throw HttpError(400, "Refresh token not detected");
+
+  const { id } = jwt.verify(token, serverConfig.refreshJwtTokenSecret);
+  console.log("Check refresh OK");
+  return id;
 };

@@ -6,18 +6,17 @@ const { serverConfig } = require("../configs");
 const authenticate = ctrlWrapper(async (req, res, next) => {
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
-  
+
   if (bearer !== "Bearer") {
     next(HttpError(401));
   }
-  
+
   try {
-    
     const { id } = jwt.verify(token, serverConfig.jwtSecret);
 
     const user = await User.findById(id);
 
-    if (!user || !user.token || user.token !== token) {
+    if (!user || !user.token) {
       next(HttpError(401));
     }
 
