@@ -477,7 +477,8 @@
             "schema": {
               "type": "integer",
               "format": "int32"
-            }
+            },
+            "example":"2024"
           },
           {
             "in": "query",
@@ -485,11 +486,9 @@
             "description": "The month for which water data is requested",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32", 
-              "minimum": 0,
-              "maximum": 11 
-            }
+              "type": "string"
+            },
+             "example":"February"
           }
         ],
         "security": [{ "Bearer": [] }],
@@ -515,11 +514,18 @@
         }
       }
     },
-    "/water/": {
+    "/water/{date}": {
       "get": {
         "tags": ["Waters"],
         "summary": "Total amount of Water drink per day",
-        "parameters": [],
+        "parameters": [ {
+            "in": "path",
+            "name": "date",
+            "required": "true",
+            "type": "string",
+            "description": "Day for which you want to receive information on the water consumed",
+            "example":"3-February-2024"
+          }],
         "security": [{ "Bearer": [] }],
         "responses": {
           "200": {
@@ -1041,10 +1047,7 @@
       "AddWaterResponse": {
         "type": "object",
         "properties": {
-            "_id": {
-              "type": "string",
-              "description": "Id drink water"
-            },
+            
             "date": {
               "type": "string",
               "description": "Date drink water"
@@ -1085,6 +1088,10 @@
               "type":"string",
               "description":"User id"
             },
+            "_id": {
+              "type": "string",
+              "description": "Id drink water"
+            },
             "createdAt":{
               "type":"string",
               "description":"Time created"
@@ -1097,8 +1104,8 @@
           }
         ,
         "example": {
-  "_id": "example4b9facd90d2d9fee",
-  "date": "2024-01-30T15:49:13.954Z",
+  
+  "date": "3 February 2024",
   "waterRate": 1000,
   "totalVolume": 800,
   "progress": 80,
@@ -1110,6 +1117,7 @@
     },
     {
       "waterVolume": 500,
+      "_id": "example4b9facd90d2d9fee",
       "time": "08:00",
       "_id": "example4b9facd90d2d9ff4"
     }
@@ -1123,15 +1131,26 @@
         "type": "object",
         "required": ["waterVolume", "time"],
         "properties": {
-          "waterVolume": {
-            "type": "number",
-            "description": "Amount of water drink",
-            "example": 300
-          },
-          "time": {
+          "date": {
             "type": "string",
-            "description": "Time of drinking water",
-            "example": "08:00"
+            "description": "Day",
+            "example": "3 February 2024"
+          },
+          "water": {
+            "type": "object",
+            "properties":{
+              "waterVolume":{
+                "type":"string",
+                "description":"Amount of water drink",
+                "example":"100"
+              },
+              "time":{
+                "type":"string",
+                "description":"Time when water unit was drunk",
+                "example":"08:00"
+              }
+              
+            }
           }
         }
       },
@@ -1372,7 +1391,7 @@
         ,
         "example": {
   "_id": "example4b9facd90d2d9fee",
-  "date": "2024-01-30T15:49:13.954Z",
+  "date": "3 February 2024",
   "waterRate": 1000,
   "totalVolume": 800,
   "progress": 80,
