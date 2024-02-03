@@ -1,7 +1,6 @@
 const userServices = require("./userServices");
 const jwtServices = require("./jwtServices");
-
-const waterServices = require('./waterSerwices');
+const waterServices = require('./waterServices');
 const Email = require('./emailServices')
 
 
