@@ -5,18 +5,33 @@ const waterControllers = require('../../controllers/waterControllers');
 
 const router = express.Router();
 
-router.use(authenticate, waterMiddleware.updateWaterRate)
+router.use(authenticate, )
 
-router.route('/')
-.post(validateBody.checkCreate(waterSchema.addWater), waterControllers.add)
+router.post(
+    '/',
+    waterMiddleware.updateWaterRate,
+    validateBody.checkCreate(waterSchema.addWater),
+    waterControllers.add
+);
 
-router.get('/month',validateQuery(waterSchema.query), waterControllers.getMonth);
+router.get(
+    '/month',
+    waterMiddleware.updateWaterRate,
+    validateQuery(waterSchema.query),
+    waterControllers.getMonth
+);
 
-router.get('/:date',validateParams(waterSchema.getDay), waterControllers.getCurrentDay)
+router.get(
+    '/:date',
+    waterMiddleware.updateWaterRate,
+    validateParams(waterSchema.getDay),
+    waterControllers.getCurrentDay
+);
 
-router.route('/:dayId/:entryId')
-  .all(waterMiddleware.checkDayEntryById)
-  .put(validateBody.checkUpdate(waterSchema.update), waterControllers.update)
-  .delete(waterControllers.remove);
+router
+    .route('/:dayId/:entryId')
+    .all(waterMiddleware.checkDayEntryById, waterMiddleware.updateWaterRate)
+    .put(validateBody.checkUpdate(waterSchema.update), waterControllers.update)
+    .delete(waterControllers.remove);
 
 module.exports = router;

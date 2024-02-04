@@ -9,6 +9,19 @@ exports.checkDayEntryById = ctrlWrapper(async (req, res, next) => {
 })
 
 exports.updateWaterRate = ctrlWrapper(async (req, res, next) => {
-    await waterServices.updateWaterRate(req.user)
+    const { date, dayId } = req.params;
+    if (req.body.date) {
+        await waterServices.updateWaterRateByDate(req.user, req.body.date)
+        return next()
+    }
+    if (date) {
+        await waterServices.updateWaterRateByDate(req.user, date.replaceAll('-', ' '))
+        return next()        
+    }
+    if (dayId) {
+        await waterServices.updateWaterRateById(req.user, dayId)
+        return next()
+    }
+    await waterServices.updateWaterRateByDate(req.user)
     next()
 })

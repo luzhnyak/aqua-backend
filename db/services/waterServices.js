@@ -78,13 +78,21 @@ exports.getMonth = async (year, month, owner) => {
   return selectedDates;
 };
 
-exports.updateWaterRate = owner => {
+exports.updateWaterRateByDate = (owner, userDate) => {
     const date = new Date();
     return Water.findOneAndUpdate(
         {
-            date: { $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()) },
+            date: userDate || `${date.getDate()} ${date.toLocaleString('en', {month: 'long'})} ${date.getFullYear()}`,
             owner,
         },
+        { waterRate: owner.waterRate },
+        { new: true }
+    );
+};
+
+exports.updateWaterRateById = (owner, dayId) => {
+    return Water.findByIdAndUpdate(
+        dayId,
         { waterRate: owner.waterRate },
         { new: true }
     );
