@@ -1046,7 +1046,10 @@
       "AddWaterResponse": {
         "type": "object",
         "properties": {
-            
+         "_id": {
+              "type": "string",
+              "description": "Id day"
+            },
             "date": {
               "type": "string",
               "description": "Date drink water"
@@ -1103,7 +1106,7 @@
           }
         ,
         "example": {
-  
+  "_id":"example4b9facd90d2d9fee",
   "date": "3 February 2024",
   "waterRate": 1000,
   "totalVolume": 800,
