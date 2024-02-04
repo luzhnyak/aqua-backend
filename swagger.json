@@ -8,7 +8,6 @@
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json", "multipart/form-data"],
   "servers": [
-    { "url": "http://localhost:3000" },
     { "url": "https://aqua-backend-ieu7.onrender.com/" }
   ],
   "tags": [
@@ -1427,7 +1426,7 @@
             },
             "waterRate":{
               "type":"number",
-              "description": "Amount of water drink"
+              "description": "Daily rate of water in liters"
             },
             "progress":{
               "type":"number",
@@ -1442,15 +1441,15 @@
         "example": [
   {
     "_id": "example9b3dfc0a5762658a",
-    "date": "2024-01-30T12:53:26.026Z",
-    "waterRate": 2000,
+    "date": "4, February",
+    "waterRate": 2,
     "progress": 120,
     "dailyEntries": 6
   },
    {
     "_id": "example9b3dfc0a5762658a",
-    "date": "2024-01-31T15:50:52.731Z",
-    "waterRate": 2000,
+    "date": "4, February",
+    "waterRate": 2,
     "progress": 100,
     "dailyEntries": 5
   }
