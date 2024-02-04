@@ -142,6 +142,7 @@ exports.refreshUserToken = async (oldRefreshToken) => {
   const token = signToken(id);
   const refreshToken = singRefreshToken(id);
 
+  user.token = token;
   user.refreshToken = refreshToken;
 
   await user.save();
@@ -175,6 +176,7 @@ exports.getCurrentUser = async (id) => {
 
 exports.logout = async (user) => {
   user.token = "";
+  user.refreshToken = "";
 
   await user.save();
 };

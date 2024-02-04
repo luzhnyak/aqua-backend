@@ -57,7 +57,6 @@ const loginUser = async (req, res) => {
 
 const refreshToken = async (req, res) => {
   const tokens = await userServices.refreshUserToken(req.body.refreshToken);
-
   res.json(tokens);
 };
 
