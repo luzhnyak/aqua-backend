@@ -50,7 +50,9 @@ exports.verifyEmail = async (verificationToken) => {
 // ============================== Resend Verify Email
 
 exports.resendVerifyEmail = async (email) => {
+
   const user = await User.findOne({ email });
+
 
   if (!user) throw HttpError(404, "User not found");
 
@@ -59,7 +61,7 @@ exports.resendVerifyEmail = async (email) => {
   try {
     await new Email(
       user,
-      `${serverConfig.frontEndUrl}/users/verify/${user.verificationToken}`
+      `${serverConfig.frontEndUrl}/verify/${user.verificationToken}`
     ).sendHello();
   } catch (error) {
     console.log(error);

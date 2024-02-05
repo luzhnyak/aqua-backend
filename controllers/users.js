@@ -10,7 +10,6 @@ require("dotenv").config();
 
 const registerUser = async (req, res) => {
   const { user } = await userServices.createNewUser(req.body);
-  console.log(user.verificationToken)
 
   try {
     await new Email(
