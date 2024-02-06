@@ -1,12 +1,10 @@
-const User = require("../db/models/user");
-const { HttpError, ctrlWrapper } = require("../helpers");
-const sendEmail = require("../middlewares/sendEmail");
+const { ctrlWrapper } = require("../helpers");
 const { userServices, Email } = require("../db/services");
 const { serverConfig } = require("../configs");
 
 require("dotenv").config();
 
-// ============================== Register
+
 
 const registerUser = async (req, res) => {
   const { user } = await userServices.createNewUser(req.body);
@@ -25,7 +23,7 @@ const registerUser = async (req, res) => {
   });
 };
 
-// ============================== Verify email
+
 
 const verifyEmail = async (req, res) => {
   await userServices.verifyEmail(req.params.verificationToken);
@@ -33,7 +31,7 @@ const verifyEmail = async (req, res) => {
   res.status(200).json({ message: "Verification successful" });
 };
 
-// ============================== Resend verify email
+
 
 const resendVerifyEmail = async (req, res) => {
   const { email } = req.body;
@@ -43,7 +41,7 @@ const resendVerifyEmail = async (req, res) => {
   res.status(200).json({ message: "Verification email sent" });
 };
 
-// ============================== Login
+
 
 const loginUser = async (req, res) => {
   const { token, user, refreshToken } = await userServices.login(req.body);
@@ -60,14 +58,14 @@ const refreshToken = async (req, res) => {
   res.json(tokens);
 };
 
-// ============================== Get current User
+
 const getCurrentUser = async (req, res) => {
-  const user = await userServices.getCurrentUser(req.user.id);
+  const user = await userServices.getCurrentUser(req.user);
 
   res.json(user);
 };
 
-// ============================== Logout User
+
 
 const logoutUser = async (req, res) => {
   await userServices.logout(req.user);
@@ -75,7 +73,7 @@ const logoutUser = async (req, res) => {
   res.status(204).send();
 };
 
-// ============================== Update water rate
+
 
 const updateUserWaterRate = async (req, res) => {
   const user = await userServices.updateUserWaterRate(req.user.id, req.body);
@@ -85,7 +83,7 @@ const updateUserWaterRate = async (req, res) => {
   });
 };
 
-// ============================== Update User Data
+
 
 const updateUserData = async (req, res) => {
   const user = await userServices.updateUserData(req.user.id, req.body);
@@ -100,7 +98,7 @@ const updateUserData = async (req, res) => {
   });
 };
 
-// ============================== Update avatar
+
 
 const updateAvatar = async (req, res) => {
   const user = await userServices.updateAvatar(req.user.id, req.file);
@@ -112,7 +110,7 @@ const updateAvatar = async (req, res) => {
   });
 };
 
-// ============================== Forgot Password Email
+
 
 const forgotPassword = async (req, res) => {
   const user = await userServices.forgotPassword(req.body.email);
@@ -131,7 +129,7 @@ const forgotPassword = async (req, res) => {
   });
 };
 
-// ============================== Change Password Email
+
 
 const changePassword = async (req, res) => {
   const { changePasswordToken } = req.params;
