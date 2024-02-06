@@ -781,6 +781,10 @@
           "token": {
             "type": "string",
             "description": "User token"
+          },
+          "refreshToken":{
+             "type": "string",
+            "description": "User refresh token"
           }
         },
         "example": {
@@ -793,7 +797,8 @@
             "createdAt": "2024-01-31T14:39:07.408Z"
           },
 
-          "token": "string.string.string"
+          "token": "string.string.string",
+          "refreshToken": "string.string.string"
         }
       },
       "VerifySendTokenResponse": {

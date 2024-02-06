@@ -7,6 +7,7 @@ const {
   userEmailSchema,
   passwordJoiSchema,
   refreshTokenJoiSchema,
+  updateWaterRateJoiSchema,
 } = require("../../schemas/userSchema");
 
 const router = express.Router();
@@ -40,12 +41,17 @@ router.patch(
   ctrl.updateAvatar
 );
 
-router.patch("/water-rate", authenticate, ctrl.updateUserWaterRate);
+router.patch(
+  "/water-rate",
+  authenticate,
+  validateBody.checkUpdate(updateWaterRateJoiSchema),
+  ctrl.updateUserWaterRate
+);
 
 router.put(
   "/update-user",
-  validateBody.checkCreate(userUpdateSchema),
   authenticate,
+  validateBody.checkCreate(userUpdateSchema),
   ctrl.updateUserData
 );
 

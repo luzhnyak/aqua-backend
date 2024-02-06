@@ -9,8 +9,6 @@ const {
 } = require("./jwtServices");
 const Email = require("./emailServices");
 
-// ============================== Create New User
-
 exports.createNewUser = async (userData) => {
   const { email } = userData;
   const user = await User.findOne({ email });
@@ -24,8 +22,6 @@ exports.createNewUser = async (userData) => {
     verificationToken: uuidv4(),
   });
 
-  newUser.password = undefined;
-
   return {
     user: {
       email: newUser.email,
@@ -33,8 +29,6 @@ exports.createNewUser = async (userData) => {
     },
   };
 };
-
-// ============================== Verify Email
 
 exports.verifyEmail = async (verificationToken) => {
   const user = await User.findOne({ verificationToken });
@@ -47,12 +41,8 @@ exports.verifyEmail = async (verificationToken) => {
   await user.save();
 };
 
-// ============================== Resend Verify Email
-
 exports.resendVerifyEmail = async (email) => {
-
   const user = await User.findOne({ email });
-
 
   if (!user) throw HttpError(404, "User not found");
 
@@ -67,8 +57,6 @@ exports.resendVerifyEmail = async (email) => {
     console.log(error);
   }
 };
-
-// ============================== Login
 
 exports.login = async (userData) => {
   const { email, password } = userData;
@@ -91,8 +79,6 @@ exports.login = async (userData) => {
 
   await user.save();
 
-  user.password = undefined;
-
   return {
     user: {
       email: user.email,
@@ -106,8 +92,6 @@ exports.login = async (userData) => {
     refreshToken,
   };
 };
-
-// ============================== AuthGoogle
 
 exports.authGoogle = async (userData) => {
   const { email } = userData;
@@ -125,15 +109,15 @@ exports.authGoogle = async (userData) => {
   }
 
   const token = signToken(user.id);
+  const refreshToken = singRefreshToken(user.id);
 
   user.token = token;
+  user.refreshToken = refreshToken;
 
   await user.save();
 
   return token;
 };
-
-// ============================== Refresh Token
 
 exports.refreshUserToken = async (oldRefreshToken) => {
   const id = checkRefreshToken(oldRefreshToken);
@@ -155,12 +139,8 @@ exports.refreshUserToken = async (oldRefreshToken) => {
   };
 };
 
-// ============================== Get Current User
-
-exports.getCurrentUser = async (id) => {
-  const user = await User.findById(id).select(
-    "name email gender waterRate avatarURL createdAt"
-  );
+exports.getCurrentUser = async (currentUser) => {
+  const user = currentUser;
 
   return {
     user: {
@@ -174,8 +154,6 @@ exports.getCurrentUser = async (id) => {
   };
 };
 
-// ============================== Logout
-
 exports.logout = async (user) => {
   user.token = "";
   user.refreshToken = "";
@@ -183,16 +161,12 @@ exports.logout = async (user) => {
   await user.save();
 };
 
-// ============================== Update Water Rate
-
 exports.updateUserWaterRate = async (id, waterRateData) => {
   const user = await User.findById(id);
   user.waterRate = waterRateData.waterRate;
 
   return user.save();
 };
-
-// ============================== Update User Data
 
 exports.updateUserData = async (id, userData) => {
   const user = await User.findById(id).select("+password");
@@ -229,8 +203,6 @@ exports.updateUserData = async (id, userData) => {
   };
 };
 
-// ============================== Update Avatar
-
 exports.updateAvatar = async (userId, avatar) => {
   if (!avatar) throw HttpError(400, "File is not found.");
 
@@ -239,8 +211,6 @@ exports.updateAvatar = async (userId, avatar) => {
 
   return user.save();
 };
-
-// ============================== Forgot Password
 
 exports.forgotPassword = async (email) => {
   const user = await User.findOne({ email });
@@ -254,7 +224,6 @@ exports.forgotPassword = async (email) => {
   return user.save();
 };
 
-// ============================== Update User Password
 exports.updateUserPasswordService = async (
   changePasswordToken,
   newPassword

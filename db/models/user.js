@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const { genSalt, hash, compare } = require("bcrypt");
 const { regexp } = require("../../vars");
 
-// ========================== Mongoose schemas
+
 
 const userSchema = new Schema(
   {
@@ -57,7 +57,7 @@ const userSchema = new Schema(
 
 userSchema.post("save", handleMongooseError);
 
-// ========================== Auto Hash Password
+
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
@@ -68,7 +68,7 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-//=========================== Compare passwords
+
 userSchema.methods.checkPassword = (candidate, passwdHash) =>
   compare(candidate, passwdHash);
 
