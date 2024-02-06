@@ -18,6 +18,10 @@ const storage = new CloudinaryStorage({
       folder: "avatars",
       allowed_formats: ["jpg", "png"],
       public_id: fileName,
+      transformation: [
+        { width: 350, height: 350, crop: "fill" },
+        { width: 700, height: 700, crop: "fill" },
+      ],
     };
   },
 });
