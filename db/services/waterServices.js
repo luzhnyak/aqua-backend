@@ -27,12 +27,6 @@ exports.add = async (date, data, owner) => {
 };
 
 exports.getCurrentDay = async (date, owner) => {
-    // const date = new Date();
-    // const waterList = await Water.findOne({
-    //     // date: { $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()) }, owner
-    //     date: `${date.getDate()} ${date.toLocaleString('en', {month: 'long'})} ${date.getFullYear()}`, owner
-    // });
-  // return waterList;
   return Water.findOne({date, owner})
 };
 
