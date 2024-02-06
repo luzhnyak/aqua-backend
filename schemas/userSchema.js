@@ -53,5 +53,8 @@ exports.refreshTokenJoiSchema = Joi.object({
 });
 
 exports.updateWaterRateJoiSchema = Joi.object({
-  waterRate: Joi.string().required(),
+  waterRate: Joi.number().min(1).max(15000).required().messages({
+    "number.min": "The value must be at least 1",
+    "number.max": "The value must not exceed 15000",
+  }),
 });

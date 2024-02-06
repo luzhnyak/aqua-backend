@@ -38,6 +38,7 @@ const userSchema = new Schema(
     },
     waterRate: {
       type: Number,
+      min:1,
       max: 15000,
       default: 2000,
     },
