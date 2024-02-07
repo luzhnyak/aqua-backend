@@ -49,7 +49,9 @@ exports.googleRedirect = ctrlWrapper(async (req, res) => {
     },
   });
 
-  const token = await userServices.authGoogle(userData.data);
+  const { token, refreshToken } = await userServices.authGoogle(userData.data);
 
-  return res.redirect(`${process.env.FRONTEND_URL}/auth?token=${token}`);
+  return res.redirect(
+    `${process.env.FRONTEND_URL}/auth?token=${token}&refreshToken=${refreshToken}`
+  );
 });

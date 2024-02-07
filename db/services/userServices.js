@@ -116,7 +116,7 @@ exports.authGoogle = async (userData) => {
 
   await user.save();
 
-  return token;
+  return { token, refreshToken };
 };
 
 exports.refreshUserToken = async (oldRefreshToken) => {
