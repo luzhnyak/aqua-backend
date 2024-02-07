@@ -3,7 +3,7 @@
 
 # ТРЕКЕР СПОЖИВАННЯ ВОДИ
 
-![Main page screenshot](./src/images/Main_page.png)
+![Main page screenshot](https://github.com/luzhnyak/aqua-frontend/raw/main/src/images/Main_page.png)
 
 ## Про проєкт:
 
