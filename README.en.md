@@ -4,7 +4,7 @@
 
 # TRACKER OF WATER
 
-![Main page screenshot](./src/images/Main_page.png)
+![Main page screenshot](https://github.com/luzhnyak/aqua-frontend/raw/main/src/images/Main_page.png)
 
 ## About the project:
 
