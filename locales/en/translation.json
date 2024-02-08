@@ -1,0 +1,9 @@
+{
+  "email": {
+    "verifyDear": "Dear,",
+    "verifyWelcome": "Welcome to Water Tracker! We are thrilled to have you as part of our community.",
+    "verifyStart": "To get started and ensure the security of your account, please verify your email by clicking on the following link:",
+    "verifyClick": "Click to verify your email",
+    "verifyIfLinkNotWork": "If the link does not work, you can copy and paste the following URL into your browser:"
+  }
+}

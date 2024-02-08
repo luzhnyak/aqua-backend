@@ -4,13 +4,15 @@ const pug = require("pug");
 const { convert } = require("html-to-text");
 
 const { serverConfig } = require("../../configs");
+const i18next = require("i18next");
 
 class Email {
-  constructor(user, url) {
+  constructor(user, url, language = "en") {
     this.to = user.email;
     this.name = user.name ? user.name : "User";
     this.url = url;
     this.from = serverConfig.metaEmailUser;
+    this.language = language;
   }
 
   _initTransport() {
@@ -24,7 +26,8 @@ class Email {
     });
   }
 
-  async _send(template, subject) {
+  async _send(template, subjectKey) {
+    const subject = await i18next.t(subjectKey, { lng: this.language });
     const html = pug.renderFile(
       path.join(__dirname, "..", "..", "views", "email", `${template}.pug`),
       {
