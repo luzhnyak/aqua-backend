@@ -4,8 +4,6 @@ const { serverConfig } = require("../configs");
 
 require("dotenv").config();
 
-
-
 const registerUser = async (req, res) => {
   const { user } = await userServices.createNewUser(req.body);
 
@@ -19,19 +17,15 @@ const registerUser = async (req, res) => {
   }
 
   res.status(201).json({
-    user: { email: user.email },
+    user: { email: user.email, language: user.language },
   });
 };
-
-
 
 const verifyEmail = async (req, res) => {
   await userServices.verifyEmail(req.params.verificationToken);
 
   res.status(200).json({ message: "Verification successful" });
 };
-
-
 
 const resendVerifyEmail = async (req, res) => {
   const { email } = req.body;
@@ -40,8 +34,6 @@ const resendVerifyEmail = async (req, res) => {
 
   res.status(200).json({ message: "Verification email sent" });
 };
-
-
 
 const loginUser = async (req, res) => {
   const { token, user, refreshToken } = await userServices.login(req.body);
@@ -58,22 +50,17 @@ const refreshToken = async (req, res) => {
   res.json(tokens);
 };
 
-
 const getCurrentUser = async (req, res) => {
   const user = await userServices.getCurrentUser(req.user);
 
   res.json(user);
 };
 
-
-
 const logoutUser = async (req, res) => {
   await userServices.logout(req.user);
 
   res.status(204).send();
 };
-
-
 
 const updateUserWaterRate = async (req, res) => {
   const user = await userServices.updateUserWaterRate(req.user.id, req.body);
@@ -82,8 +69,6 @@ const updateUserWaterRate = async (req, res) => {
     waterRate: user.waterRate,
   });
 };
-
-
 
 const updateUserData = async (req, res) => {
   const user = await userServices.updateUserData(req.user.id, req.body);
@@ -98,8 +83,6 @@ const updateUserData = async (req, res) => {
   });
 };
 
-
-
 const updateAvatar = async (req, res) => {
   const user = await userServices.updateAvatar(req.user.id, req.file);
 
@@ -109,8 +92,6 @@ const updateAvatar = async (req, res) => {
     avatarURL,
   });
 };
-
-
 
 const forgotPassword = async (req, res) => {
   const user = await userServices.forgotPassword(req.body.email);
@@ -128,8 +109,6 @@ const forgotPassword = async (req, res) => {
     message: "Password reset instructions have been sent to your email.",
   });
 };
-
-
 
 const changePassword = async (req, res) => {
   const { changePasswordToken } = req.params;
