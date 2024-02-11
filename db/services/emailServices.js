@@ -4,13 +4,16 @@ const pug = require("pug");
 const { convert } = require("html-to-text");
 
 const { serverConfig } = require("../../configs");
+const i18next = require("../../locales/config");
 
 class Email {
-  constructor(user, url) {
+  constructor(user, url, language = "en") {
     this.to = user.email;
     this.name = user.name ? user.name : "User";
     this.url = url;
     this.from = serverConfig.metaEmailUser;
+    this.language = language;
+    console.log(language);
   }
 
   _initTransport() {
@@ -31,6 +34,7 @@ class Email {
         name: this.name,
         url: this.url,
         subject,
+        t: (key) => i18next.t(key, { lng: this.language }),
       }
     );
 

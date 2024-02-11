@@ -4,8 +4,6 @@ const Schema = mongoose.Schema;
 const { genSalt, hash, compare } = require("bcrypt");
 const { regexp } = require("../../vars");
 
-
-
 const userSchema = new Schema(
   {
     password: {
@@ -38,7 +36,7 @@ const userSchema = new Schema(
     },
     waterRate: {
       type: Number,
-      min:1,
+      min: 1,
       max: 15000,
       default: 2000,
     },
@@ -52,13 +50,14 @@ const userSchema = new Schema(
     verificationToken: {
       type: String,
     },
+    language: {
+      type: String,
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
 userSchema.post("save", handleMongooseError);
-
-
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
@@ -68,7 +67,6 @@ userSchema.pre("save", async function (next) {
 
   next();
 });
-
 
 userSchema.methods.checkPassword = (candidate, passwdHash) =>
   compare(candidate, passwdHash);

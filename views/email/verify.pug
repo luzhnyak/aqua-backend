@@ -3,9 +3,10 @@ extends layouts/main
 block content
     tr
         td.wrapper
-            p Dear #{name},
-            p Welcome! We are thrilled to have you as part of our community.
-            p To get started and ensure the security of your account, please verify your email by clicking on the following link:
+            p #{t("email.verifyDear")} #{name},
+            p #{t('email.Welcome')}
+            p #{t('email.verifyPart')}
+            p #{t('email.verifyStart')}
             table.btn.btn-primary(role="presentation", border="0", cellpadding="0", cellspacing="0")
                 tbody
                     tr
@@ -14,6 +15,6 @@ block content
                                 tbody
                                     tr
                                         td
-                                            a(href=url, target="_blank") Click to verify your email
-            p If the link does not work, you can copy and paste the following URL into your browser:
+                                            a(href=url, target="_blank") #{t('email.verifyClick')}
+            p #{t('email.verifyIfLinkNotWork')}
             p #{url}
