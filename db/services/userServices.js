@@ -214,7 +214,7 @@ exports.updateAvatar = async (userId, avatar) => {
   return user.save();
 };
 
-exports.forgotPassword = async (email, language) => {
+exports.forgotPassword = async (email) => {
   const user = await User.findOne({ email });
 
   if (!user) {

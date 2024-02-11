@@ -10,7 +10,7 @@ const registerUser = async (req, res) => {
     await new Email(
       user,
       `${serverConfig.frontEndUrl}/verify/${user.verificationToken}`,
-      user.language
+      req.body.language
     ).sendHello();
   } catch (error) {
     console.log(error);
@@ -100,7 +100,7 @@ const forgotPassword = async (req, res) => {
     await new Email(
       user,
       `${serverConfig.frontEndUrl}/update-password/${user.verificationToken}`,
-      user.language
+      req.body.language
     ).forgotPass();
   } catch (error) {
     console.log(error);
