@@ -3,9 +3,10 @@ extends layouts/main
 block content
     tr
         td.wrapper
-            p Dear #{name},
-            p We received a request to reset the password associated with your account. If you did not make this request, please ignore this email.
-            p To reset your password, click on the following link:
+            p #{t("forgotPass.Dear")} #{name},
+            p #{t("forgotPass.Welcome")}
+            p #{t("forgotPass.Intro")}
+            p #{t("forgotPass.Link")}
             table.btn.btn-primary(role="presentation", border="0", cellpadding="0", cellspacing="0")
                 tbody
                     tr
@@ -14,6 +15,6 @@ block content
                                 tbody
                                     tr
                                         td
-                                            a(href=url, target="_blank") Click to reset your password
-            p If the link does not work, copy and paste the following URL into your browser:
+                                            a(href=url, target="_blank") #{t("forgotPass.Click")}
+            p #{t("forgotPass.LinkNotWork")}
             p #{url}                               

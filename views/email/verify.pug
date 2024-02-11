@@ -3,9 +3,10 @@ extends layouts/main
 block content
     tr
         td.wrapper
-            p #{t('email.verifyDear')} #{name},
-            p #{t('email.verifyWelcome')}
-            p #{t('email.verifyStart')}To get started and ensure the security of your account, please verify your email by clicking on the following link:
+            p #{t("email.verifyDear")} #{name},
+            p #{t('email.Welcome')}
+            p #{t('email.verifyPart')}
+            p #{t('email.verifyStart')}
             table.btn.btn-primary(role="presentation", border="0", cellpadding="0", cellspacing="0")
                 tbody
                     tr

@@ -26,6 +26,7 @@ exports.createNewUser = async (userData) => {
     user: {
       email: newUser.email,
       verificationToken: newUser.verificationToken,
+      language: newUser.language,
     },
   };
 };
@@ -41,7 +42,7 @@ exports.verifyEmail = async (verificationToken) => {
   await user.save();
 };
 
-exports.resendVerifyEmail = async (email) => {
+exports.resendVerifyEmail = async (email, language) => {
   const user = await User.findOne({ email });
 
   if (!user) throw HttpError(404, "User not found");
@@ -51,7 +52,8 @@ exports.resendVerifyEmail = async (email) => {
   try {
     await new Email(
       user,
-      `${serverConfig.frontEndUrl}/verify/${user.verificationToken}`
+      `${serverConfig.frontEndUrl}/verify/${user.verificationToken}`,
+      language
     ).sendHello();
   } catch (error) {
     console.log(error);
@@ -212,7 +214,7 @@ exports.updateAvatar = async (userId, avatar) => {
   return user.save();
 };
 
-exports.forgotPassword = async (email) => {
+exports.forgotPassword = async (email, language) => {
   const user = await User.findOne({ email });
 
   if (!user) {

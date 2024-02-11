@@ -6,18 +6,18 @@ require("dotenv").config();
 
 const registerUser = async (req, res) => {
   const { user } = await userServices.createNewUser(req.body);
-
   try {
     await new Email(
       user,
-      `${serverConfig.frontEndUrl}/verify/${user.verificationToken}`
+      `${serverConfig.frontEndUrl}/verify/${user.verificationToken}`,
+      user.language
     ).sendHello();
   } catch (error) {
     console.log(error);
   }
 
   res.status(201).json({
-    user: { email: user.email, language: user.language },
+    user: { email: user.email },
   });
 };
 
@@ -28,9 +28,9 @@ const verifyEmail = async (req, res) => {
 };
 
 const resendVerifyEmail = async (req, res) => {
-  const { email } = req.body;
+  const { email, language } = req.body;
 
-  await userServices.resendVerifyEmail(email);
+  await userServices.resendVerifyEmail(email, language);
 
   res.status(200).json({ message: "Verification email sent" });
 };
@@ -99,7 +99,8 @@ const forgotPassword = async (req, res) => {
   try {
     await new Email(
       user,
-      `${serverConfig.frontEndUrl}/update-password/${user.verificationToken}`
+      `${serverConfig.frontEndUrl}/update-password/${user.verificationToken}`,
+      user.language
     ).forgotPass();
   } catch (error) {
     console.log(error);

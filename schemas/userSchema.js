@@ -20,6 +20,7 @@ exports.userEmailSchema = Joi.object({
     "any.required": "Missing required field email",
     "string.pattern.base": "Email {:[.]} is not valid",
   }),
+  language: Joi.string(),
 });
 
 exports.userUpdateSchema = Joi.object({
